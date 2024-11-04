@@ -21,3 +21,23 @@ This can be thought of as a sliding window of length `k` that moves across the s
 The Rust code below provides two implementations to generate k-mers from a sequence:
 1. A **naive implementation** that eagerly returns all k-mers at once in a `Vec<&str>`.
 2. A **lazy implementation** that returns an iterator, generating each k-mer only when it's needed, which is useful for handling large sequences without significant memory usage.
+
+## Build and run the code
+
+```bash
+cargo run
+```
+
+## Output
+
+```bash
+K-mers: ["ACGTA", "CGTAC", "GTACG", "TACGT", "ACGTA", "CGTAC", "GTACG"]
+K-mers lazy: ["ACGTA", "CGTAC", "GTACG", "TACGT", "ACGTA", "CGTAC", "GTACG"]
+K-mers lazy evaluation: ACGTA
+K-mers lazy evaluation: CGTAC
+K-mers lazy evaluation: GTACG
+K-mers lazy evaluation: TACGT
+K-mers lazy evaluation: ACGTA
+K-mers lazy evaluation: CGTAC
+K-mers lazy evaluation: GTACG
+```
