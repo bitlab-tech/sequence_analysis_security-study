@@ -2,7 +2,7 @@
 
 This project is a **proof of concept (POC)** implementation based on research paper: ["A secure SNP panel scheme using homomorphically encrypted K-mers without SNP calling on the user side (2019)"](https://pubmed.ncbi.nlm.nih.gov/30967116/) by **Sungjoon Park, Minsu Kim, Seokjun Seo, Seungwan Hong, Kyoohyung Han, Keewoo Lee, Jung Hee Cheon and Sun Kim**.
 
-It describes a privacy-preserving method for comparing patient genomic sequences to SNP panels held by a hospital using [homomorphic encryption](https://en.wikipedia.org/wiki/Homomorphic_encryption). The goal is to ensure that the patient's genomic data remains encrypted and confidential throughout the entire comparison process while allowing the hospital to conduct the necessary operations securely.
+It describes a privacy-preserving method for comparing patient genomic sequences to [SNP](https://en.wikipedia.org/wiki/Single-nucleotide_polymorphism) panels held by a hospital using [homomorphic encryption](https://en.wikipedia.org/wiki/Homomorphic_encryption). The goal is to ensure that the patient's genomic data remains encrypted and confidential throughout the entire comparison process while allowing the hospital to conduct the necessary operations securely.
 
 ## Project Overview
 
