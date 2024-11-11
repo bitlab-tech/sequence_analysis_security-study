@@ -128,6 +128,7 @@ fn main() {
     //================================================================
     // Step 1: user splits sequence into k-mers
     let query_kmers: Vec<&str> = k_mer_lazy(query, k).collect();
+    println!("query sequence: {:?}", query);
     println!("query k-mers: {:?}", query_kmers);
 
     // Step 2: user generates homomorphic encryption keys and

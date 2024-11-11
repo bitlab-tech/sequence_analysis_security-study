@@ -44,6 +44,20 @@ This POC demonstrates a method where:
 - Rust version **1.81** or later.
 - `tfhe-rs`: A Rust crate for fully homomorphic encryption.
 
+## Run the program
+
+```bash
+cargo run -r
+```
+
+### Example output:
+```bash
+query sequence: "ACGTTAACT"
+query k-mers: ["ACGTT", "CGTTA", "GTTAA", "TTAAC"]
+query_kmer_hashes: [2578886965, 1013214705, 3180670509, 1324437671]
+Decrypted result: [true, false, true, true]
+```
+
 ## Research Context
 
 This POC is inspired by the methods described in a research paper that aims to establish a secure communication protocol between a patient and a hospital. The protocol enables the patient to encrypt their genomic data and send it for analysis without exposing the raw sequence, while the hospital preserves the confidentiality of its SNP panel data.
