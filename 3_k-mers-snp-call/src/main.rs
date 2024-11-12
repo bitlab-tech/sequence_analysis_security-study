@@ -11,8 +11,8 @@ use tfhe::{
     FheBool
 };
 
-fn equality_test(query_kmer: &FheUint<FheUint32Id>, subject_kmer: &str) -> FheBool {
-    let subject_kmer_hash: u32 = murmur32(subject_kmer.as_bytes(), 123456789u32);
+fn equality_test(query_kmer: &FheUint<FheUint32Id>, subject_kmer: &str, seed: u32) -> FheBool {
+    let subject_kmer_hash: u32 = murmur32(subject_kmer.as_bytes(), seed);
     query_kmer.eq(subject_kmer_hash)
 }
 
@@ -20,6 +20,7 @@ fn snp_compare<'a>(
     query_kmers: &'a Vec<FheUint<FheUint32Id>>,
     k: usize,
     subject: &'a str,
+    seed: u32,
     results: &'a mut Vec<FheBool>
 ) -> () {
     for i in 0..(query_kmers.len()) {
@@ -27,9 +28,9 @@ fn snp_compare<'a>(
         for subject_kmer in k_mer_lazy(subject, k) {
             let query_kmer: &FheUint<FheUint32Id> = &query_kmers[i];
             if results.len() == i {
-                results.push(equality_test(query_kmer, subject_kmer));                
+                results.push(equality_test(query_kmer, subject_kmer, seed));                
             } else {
-                results[i] |= equality_test(query_kmer, subject_kmer);
+                results[i] |= equality_test(query_kmer, subject_kmer, seed);
             }
         }
     }
@@ -155,7 +156,7 @@ fn main() {
     // in the surrounding positions homomorphically
     let mut results: Vec<FheBool> = Vec::with_capacity(enc_kmers.len());
     for snp in snps.iter() {
-        snp_compare(&enc_kmers, k, &snp, &mut results);
+        snp_compare(&enc_kmers, k, &snp, seed, &mut results);
     }
 
     //================================================================
