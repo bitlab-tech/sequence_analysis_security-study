@@ -1,5 +1,5 @@
 [package]
-name = "k-mers-snp-call"
+name = "k-mers_snp-call_tfhe"
 version = "0.1.0"
 edition = "2021"
 
