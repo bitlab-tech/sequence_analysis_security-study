@@ -55,7 +55,10 @@ cargo run -r
 query sequence: "ACGTTAACT"
 query k-mers: ["ACGTT", "CGTTA", "GTTAA", "TTAAC"]
 query_kmer_hashes: [2578886965, 1013214705, 3180670509, 1324437671]
-Decrypted result: [true, false, true, true]
+Time execution running with single thread: 8.77s
+Time execution running with parallel threads: 4.17s
+Decrypted result single thread: [true, false, true, true]
+Decrypted result parallel threads: [true, false, true, true]
 ```
 
 ## Research Context
