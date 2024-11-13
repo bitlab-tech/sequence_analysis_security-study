@@ -4,36 +4,71 @@ use tfhe::{
     ConfigBuilder,
     generate_keys,
     set_server_key,
+    ServerKey,
     ClientKey,
     FheUint32,
     FheUint32Id,
     FheUint,
     FheBool
 };
+use rayon::prelude::*;
+use std::time::Instant;
 
 fn equality_test(query_kmer: &FheUint<FheUint32Id>, subject_kmer: &str, seed: u32) -> FheBool {
     let subject_kmer_hash: u32 = murmur32(subject_kmer.as_bytes(), seed);
     query_kmer.eq(subject_kmer_hash)
 }
 
-fn snp_compare<'a>(
+fn snp_compare_single<'a>(
     query_kmers: &'a Vec<FheUint<FheUint32Id>>,
     k: usize,
-    subject: &'a str,
+    subjects: &'a Vec<&str>,
+    seed: u32
+) -> Vec<FheBool> {
+    let results = query_kmers.iter().map(| query_kmer | {
+        subjects
+            .iter()
+            .map(|subject| {
+                k_mer_lazy(&subject, k)
+                    .map(|subject_kmer| {
+                        equality_test(query_kmer, subject_kmer, seed)
+                    })
+                    .reduce(|a, b| a | b)
+                    .unwrap()
+            })
+            .reduce(|a, b | a | b)
+            .unwrap()
+    }).collect();
+
+    results
+}
+
+fn snp_compare_parallel<'a>(
+    query_kmers: &'a Vec<FheUint<FheUint32Id>>,
+    k: usize,
+    subjects: &'a Vec<&str>,
     seed: u32,
-    results: &'a mut Vec<FheBool>
-) -> () {
-    for i in 0..(query_kmers.len()) {
-        // let mut checks: Vec<FheBool> = Vec::new();
-        for subject_kmer in k_mer_lazy(subject, k) {
-            let query_kmer: &FheUint<FheUint32Id> = &query_kmers[i];
-            if results.len() == i {
-                results.push(equality_test(query_kmer, subject_kmer, seed));                
-            } else {
-                results[i] |= equality_test(query_kmer, subject_kmer, seed);
-            }
-        }
-    }
+    server_key: ServerKey
+) -> Vec<FheBool> {
+    let results = query_kmers.par_iter().map(| query_kmer | {
+        // Set server key for the parallel threads
+        set_server_key(server_key.clone());
+        // Compare k-mers
+        subjects
+            .iter()
+            .map(|subject| {
+                k_mer_lazy(&subject, k)
+                    .map(|subject_kmer| {
+                        equality_test(query_kmer, subject_kmer, seed)
+                    })
+                    .reduce(|a, b| a | b)
+                    .unwrap()
+            })
+            .reduce(|a, b | a | b)
+            .unwrap()
+    }).collect();
+
+    results
 }
 
 fn k_mer_lazy<'a>(seq: &'a str, k: usize) -> impl Iterator<Item = &'a str> {
@@ -114,13 +149,13 @@ fn murmur32(key: &[u8], seed: u32) -> u32 {
 fn main() {
     // Example set up params
     let query: &str = "ACGTTAACT";
-    let snps: [&str; 5] = [
+    let snps: Vec<&str> = [
         "ACGTTGACTA",
         "GCAATTGGAC",
         "CGGAAATTAC",
         "GAGTTAACCT",
         "GAGGATTTCT"
-    ];
+    ].to_vec();
     let k: usize = 5;
     let seed: u32 = 123456789;
 
@@ -150,23 +185,34 @@ fn main() {
     //================================================================
     // Step 3: user sends encrypted query k-mers and server key to server
     // Server takes server key and set it to perform homomorphic operations
+    let server_key_clone = server_key.clone();
     set_server_key(server_key);
 
     // Step 4: server compares query k-mers against all snp k-mers
     // in the surrounding positions homomorphically
-    let mut results: Vec<FheBool> = Vec::with_capacity(enc_kmers.len());
-    for snp in snps.iter() {
-        snp_compare(&enc_kmers, k, &snp, seed, &mut results);
-    }
+    let mut before = Instant::now();
+    let result_single = snp_compare_single(&enc_kmers, k, &snps, seed);
+    println!("Time execution running with single thread: {:.2?}", before.elapsed());
+
+    before = Instant::now();
+    let results_parallel = snp_compare_parallel(&enc_kmers, k, &snps, seed, server_key_clone);
+    println!("Time execution running with parallel threads: {:.2?}", before.elapsed());
 
     //================================================================
     // Client Side
     //================================================================
     // Step 5: result (encrypted) is sent back to user
     // User decrypts result and prints it
-    print!("Decrypted result: ");
-    let dec_results: Vec<bool> = results.iter()
+    let client_key_clone = client_key.clone();
+    print!("Decrypted result single thread: ");
+    let dec_results: Vec<bool> = result_single.iter()
         .map(move |result: &FheBool| result.decrypt(&client_key))
+        .collect();
+    println!("{:?}", dec_results);
+
+    print!("Decrypted result parallel threads: ");
+    let dec_results: Vec<bool> = results_parallel.iter()
+        .map(move |result: &FheBool| result.decrypt(&client_key_clone))
         .collect();
     println!("{:?}", dec_results);
 }
