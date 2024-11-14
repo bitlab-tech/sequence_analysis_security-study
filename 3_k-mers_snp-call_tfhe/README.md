@@ -52,13 +52,21 @@ cargo run -r
 
 ### Example output:
 ```bash
+==================================================
 query sequence: "ACGTTAACT"
 query k-mers: ["ACGTT", "CGTTA", "GTTAA", "TTAAC"]
 query_kmer_hashes: [2578886965, 1013214705, 3180670509, 1324437671]
-Time execution running with single thread: 8.77s
-Time execution running with parallel threads: 4.17s
+==================================================
+K-mers encryption time: 1.33ms
+Server execution time single thread: 5.75s
+Server execution time parallel threads: 4.64s
+==================================================
 Decrypted result single thread: [true, false, true, true]
 Decrypted result parallel threads: [true, false, true, true]
+Result decryption time: 6.08µs
+==================================================
+Total execution time: 11.40s
+==================================================
 ```
 
 ## Research Context
