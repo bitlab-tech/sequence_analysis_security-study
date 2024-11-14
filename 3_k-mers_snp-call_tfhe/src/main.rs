@@ -4,7 +4,6 @@ use tfhe::{
     ConfigBuilder,
     generate_keys,
     set_server_key,
-    ServerKey,
     ClientKey,
     FheUint32,
     FheUint32Id,
@@ -25,7 +24,7 @@ fn snp_compare_single<'a>(
     subjects: &'a Vec<&str>,
     seed: u32
 ) -> Vec<FheBool> {
-    let results = query_kmers.iter().map(| query_kmer | {
+    let results = query_kmers.iter().map(|query_kmer| {
         subjects
             .iter()
             .map(|subject| {
@@ -36,7 +35,7 @@ fn snp_compare_single<'a>(
                     .reduce(|a, b| a | b)
                     .unwrap()
             })
-            .reduce(|a, b | a | b)
+            .reduce(|a, b| a | b)
             .unwrap()
     }).collect();
 
@@ -47,13 +46,9 @@ fn snp_compare_parallel<'a>(
     query_kmers: &'a Vec<FheUint<FheUint32Id>>,
     k: usize,
     subjects: &'a Vec<&str>,
-    seed: u32,
-    server_key: ServerKey
+    seed: u32
 ) -> Vec<FheBool> {
     let results = query_kmers.par_iter().map(| query_kmer | {
-        // Set server key for the parallel threads
-        set_server_key(server_key.clone());
-        // Compare k-mers
         subjects
             .iter()
             .map(|subject| {
@@ -81,7 +76,7 @@ fn k_mer_lazy<'a>(seq: &'a str, k: usize) -> impl Iterator<Item = &'a str> {
 
 fn encrypt_kmer_hashes(kmer_hashes: &Vec<u32>, client_key: &ClientKey) -> Vec<FheUint<FheUint32Id>> {
     kmer_hashes
-        .iter()
+        .par_iter()
         .map(|kmer_hash| FheUint32::try_encrypt(kmer_hash.clone(), client_key).unwrap())
         .collect()
 }
@@ -162,41 +157,55 @@ fn main() {
     //================================================================
     // Client Side
     //================================================================
+    let start_time = Instant::now();
     // Step 1: user splits sequence into k-mers
     let query_kmers: Vec<&str> = k_mer_lazy(query, k).collect();
+    println!("==================================================");
     println!("query sequence: {:?}", query);
     println!("query k-mers: {:?}", query_kmers);
 
     // Step 2: user generates homomorphic encryption keys and
     // encrypts query k-mers
     // User generates homomorphic encryption keys
-    let config: Config = ConfigBuilder::default().build();
+    let config: Config = ConfigBuilder::default()
+        .use_custom_parameters(
+           tfhe::shortint::parameters::PARAM_MULTI_BIT_MESSAGE_2_CARRY_2_GROUP_3_KS_PBS
+        )
+        .build();
     let (client_key, server_key) = generate_keys(config);
+
     // User hashes the k-mers and encrypt
     let query_kmer_hashes: Vec<u32> = query_kmers
         .iter()
         .map(|kmer| murmur32(kmer.as_bytes(), seed))
         .collect();
     println!("query_kmer_hashes: {:?}", query_kmer_hashes);
+    println!("==================================================");
+
+    let mut before = Instant::now();
     let enc_kmers: Vec<FheUint<FheUint32Id>> = encrypt_kmer_hashes(&query_kmer_hashes, &client_key);
+    println!("K-mers encryption time: {:.2?}", before.elapsed());
 
     //================================================================
     // Server Side
     //================================================================
     // Step 3: user sends encrypted query k-mers and server key to server
     // Server takes server key and set it to perform homomorphic operations
-    let server_key_clone = server_key.clone();
+    // Set server key in all paralell threads
+    rayon::broadcast(|_| set_server_key(server_key.clone()));
+    // Set server key in main thread
     set_server_key(server_key);
 
     // Step 4: server compares query k-mers against all snp k-mers
     // in the surrounding positions homomorphically
-    let mut before = Instant::now();
+    before = Instant::now();
     let result_single = snp_compare_single(&enc_kmers, k, &snps, seed);
-    println!("Time execution running with single thread: {:.2?}", before.elapsed());
+    println!("Server execution time single thread: {:.2?}", before.elapsed());
 
     before = Instant::now();
-    let results_parallel = snp_compare_parallel(&enc_kmers, k, &snps, seed, server_key_clone);
-    println!("Time execution running with parallel threads: {:.2?}", before.elapsed());
+    let results_parallel = snp_compare_parallel(&enc_kmers, k, &snps, seed);
+    println!("Server execution time parallel threads: {:.2?}", before.elapsed());
+    println!("==================================================");
 
     //================================================================
     // Client Side
@@ -211,8 +220,13 @@ fn main() {
     println!("{:?}", dec_results);
 
     print!("Decrypted result parallel threads: ");
+    before = Instant::now();
     let dec_results: Vec<bool> = results_parallel.iter()
         .map(move |result: &FheBool| result.decrypt(&client_key_clone))
         .collect();
     println!("{:?}", dec_results);
+    println!("Result decryption time: {:.2?}", before.elapsed());
+    println!("==================================================");
+    println!("Total execution time: {:.2?}", start_time.elapsed());
+    println!("==================================================");
 }
