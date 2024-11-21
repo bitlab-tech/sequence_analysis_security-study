@@ -73,20 +73,33 @@ And:
 
 ### Encryption
 
-1. Compute:$$   B = \sum_{i = 0}^{k - 1} A_i \cdot S_i + \Delta M + E$$
+1. Compute:
 
-2. Define:$$   GLWE_{\vec{S}, \sigma}(\Delta M) = (A, B) \subseteq \mathcal{R}_q^{k+1}$$
+    $B = \sum_{i = 0}^{k - 1} A_i \cdot S_i + \Delta M + E$
 
-3. The ciphertext is:$$   C = (A_0, \ldots, A_{k-1}, B)$$
+2. Define:
+
+    $GLWE_{\vec{S}, \sigma}(\Delta M) = (A, B) \subseteq \mathcal{R}_q^{k+1}$
+
+3. The ciphertext is:
+    
+    $C = (A_0, \ldots, A_{k-1}, B)$
 
 ---
 
 ### Decryption
 
-1. Compute the linear combination:$$   B - \sum_{i = 0}^{k - 1} A_{i}S_{i}$$
-This simplifies to:$$   \Delta M + E \in R_q$$
+1. Compute the linear combination:
 
-2. Recover the plaintext $M$ by rounding:$$   M = \lfloor (\Delta M + E) / \Delta \rceil$$
+    $B - \sum_{i = 0}^{k - 1} A_{i}S_{i}$
+
+    This simplifies to:
+  
+    $\Delta M + E \in R_q$
+
+2. Recover the plaintext $M$ by rounding:
+
+    $M = \lfloor (\Delta M + E) / \Delta \rceil$
 
 ---
 
