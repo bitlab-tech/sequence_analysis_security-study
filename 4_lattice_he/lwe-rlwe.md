@@ -103,6 +103,14 @@ And:
 
 ---
 
+### References
+
+- [Fully Homomorphic Encryption](https://cseweb.ucsd.edu/classes/fa17/cse206A-a/LecFHE.pdf)
+- [TFHE Deep Dive - Part I - Ciphertext types](https://www.zama.ai/post/tfhe-deep-dive-part-1)
+- [003 TFHE Deep Dive w/ Ilaria Chillotti](https://www.youtube.com/watch?v=npoHSR6-oRw)
+
+---
+
 ### Example
 
 - Set up:
