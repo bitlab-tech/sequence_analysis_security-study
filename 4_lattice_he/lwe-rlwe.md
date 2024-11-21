@@ -18,7 +18,7 @@ $\bar{A} = (A, b^{T}) \in \mathbb{Z}_q^{(n + 1) \times m}$
 
 is known as the **"Learning With Errors"** (LWE) problem. This is an average-case variant of the **bounded distance decoding** (BDD) problem for a random $q$-ary lattice:
 
-$\Lambda_q(A) = \{ A^T x \ | \ x \in \mathbb{Z}_q^n \} + q \mathbb{Z}^m,$
+$\Lambda_q(A) = \lbrace A^T x \ | \ x \in \mathbb{Z}_q^n \rbrace + q \mathbb{Z}^m,$
 
 with target vector $b$.
 
@@ -32,7 +32,7 @@ Given:
 
 - $R_q = (\mathbb{Z}/q\mathbb{Z})[X]/(X^N + 1)$, the same ring over the modular integers
 
-- Modular reductions are centered around zero. As an example, when reducing modulo $64$, we use the congruence classes $\{-32, -31,..., 0,..., 30, 31\}$
+- Modular reductions are centered around zero. As an example, when reducing modulo $64$, we use the congruence classes $\lbrace-32, -31,..., 0,..., 30, 31\rbrace$
 
 - $\chi_\sigma$: a Gaussian probability distribution with mean $\mu = 0$ and standard deviation $\sigma$
 
