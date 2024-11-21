@@ -16,7 +16,7 @@ The problem of recovering $\vec{s}$ from:
 
 $\bar{A} = (A, b^{T}) \in \mathbb{Z}_q^{(n + 1) \times m}$
 
-is known as the **"Learning With Errors"** (LWE) problem. This is an average-case variant of the **bounded distance decoding** (BDD) problem for a random $q$-ary lattice:
+is known as the ["Learning With Errors" (LWE)](https://en.wikipedia.org/wiki/Learning_with_errors) problem. This is an average-case variant of the [bounded distance decoding (BDD)](https://en.wikipedia.org/wiki/Lattice_problem#Bounded_distance_decoding) problem for a random $q$-ary lattice:
 
 $\Lambda_q(A) = \lbrace A^T x \ | \ x \in \mathbb{Z}_q^n \rbrace + q \mathbb{Z}^m,$
 
@@ -28,13 +28,13 @@ with target vector $b$.
 
 Given:
 
-- $R = \mathbb{Z}[X]/(X^N + 1)$, a polynomial ring modulo $X^N + 1$
+- $R = \mathbb{Z}[X]/(X^N + 1)$, a [polynomial ring](https://en.wikipedia.org/wiki/Polynomial_ring) modulo $X^N + 1$
 
 - $R_q = (\mathbb{Z}/q\mathbb{Z})[X]/(X^N + 1)$, the same ring over the modular integers
 
-- Modular reductions are centered around zero. As an example, when reducing modulo $64$, we use the congruence classes $\lbrace-32, -31,..., 0,..., 30, 31\rbrace$
+- Modular reductions are centered around zero. As an example, when reducing modulo $64$, we use the [congruence](https://en.wikipedia.org/wiki/Congruence_relation) classes $\lbrace-32, -31,..., 0,..., 30, 31\rbrace$
 
-- $\chi_\sigma$: a Gaussian probability distribution with mean $\mu = 0$ and standard deviation $\sigma$
+- $\chi_\sigma$: a [Gaussian probability distribution](https://en.wikipedia.org/wiki/Normal_distribution) with mean $\mu = 0$ and standard deviation $\sigma$
 
 - Capital letters ($A, B, S, \dots$) denote polynomials
 
