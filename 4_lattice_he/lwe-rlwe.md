@@ -203,6 +203,6 @@ And:
 
   - $\lfloor (\Delta M + E) / \Delta \rceil = \lfloor \frac{-31 + 16X^{2} - 15X^{3}}{16} \rceil$
 
-      $= \lfloor -\frac{31}{16} + \frac{16}{16}X^{2} - \frac{15}{16}X^{2} \rceil$
+      $= \lfloor -\frac{31}{16} + \frac{16}{16}X^{2} - \frac{15}{16}X^{3} \rceil$
 
       $= -2 + X^2 - X^3 = M$
