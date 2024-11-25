@@ -73,16 +73,12 @@ Encodes a genomic sequence into its binary representation:
 - Each nucleotide is converted to its 2-bit value.
 - The bits are shifted and combined into a single value.
 
----
-
 ## Example Input and Output
 
 For the k-mer `ACGTACGTACGTACGT` (length 16):
 
 - **Binary encoded value (in binary)**: `0b00011011000110110001101100011011`
 - **Binary encoded value (in decimal)**: `732013653`
-
----
 
 ## Applications
 
@@ -98,15 +94,11 @@ For the k-mer `ACGTACGTACGTACGT` (length 16):
 4. **High-Performance Computing**:
    - Optimize sequence alignment, SNP detection, or other bioinformatics algorithms.
 
----
-
 ## Future Work
 
 - **Extend to RNA Sequences**: Add support for RNA bases (`A`, `C`, `G`, `U`).
 - **Parallel Processing**: Enable multi-threaded encoding for large datasets.
 - **Integration with Databases**: Store binary-encoded sequences for fast retrieval.
-
----
 
 ## Acknowledgments
 
