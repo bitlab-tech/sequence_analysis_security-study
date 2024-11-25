@@ -63,7 +63,7 @@ impl BitAnd for KmerType {
             (KmerType::U32(a), KmerType::U32(b)) => KmerType::U32(a & b),
             (KmerType::U64(a), KmerType::U64(b)) => KmerType::U64(a & b),
             (KmerType::U128(a), KmerType::U128(b)) => KmerType::U128(a & b),
-            _ => panic!("Bitwise OR is not supported for mismatched KmerType variants"),
+            _ => panic!("Bitwise AND is not supported for mismatched KmerType variants"),
         }
     }
 }
