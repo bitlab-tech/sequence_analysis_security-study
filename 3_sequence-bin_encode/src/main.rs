@@ -148,8 +148,7 @@ fn init_kmer_type(len: usize, val: u8) -> KmerType {
 }
 
 fn binary_encode(kmer: &str) -> KmerType {
-    let vec_char_kmer: Vec<char> = kmer.chars().collect();
-    let kmer_len: usize = vec_char_kmer.len();
+    let kmer_len: usize = kmer.len();
 
     let mut result: KmerType = init_kmer_type(kmer_len, 0b00);
 
