@@ -1,26 +1,64 @@
 # On LWE and RLWE
 
+## Overview
+
+This document provides a structured exploration of the [Learning With Errors (LWE)](https://en.wikipedia.org/wiki/Learning_with_errors) and [Ring Learning With Errors (RLWE)](https://en.wikipedia.org/wiki/Ring_learning_with_errors) problems, foundational concepts in [lattice-based cryptography](https://en.wikipedia.org/wiki/Lattice-based_cryptography). 
+
+**LWE** and **RLWE** are the building blocks of advanced cryptographic systems like [Fully Homomorphic Encryption (FHE)](https://en.wikipedia.org/wiki/Homomorphic_encryption), enabling secure computation on encrypted data. This document connects theory to practice with references to seminal works and implementations.
+
+Explore these concepts to understand the interplay between mathematical structures and cryptographic operations essential for [post-quantum security](https://en.wikipedia.org/wiki/Post-quantum_cryptography).
+
+## Table of Contents
+
+- [Security Assumption](#security-assumption)
+  * [The LWE Problem](#the-lwe-problem)
+  * [Why is LWE Hard?](#why-is-lwe-hard)
+- [LWE and RLWE (GLWE)](#lwe-and-rlwe-glwe)
+  * [Parameters](#parameters)
+  * [Encryption](#encryption)
+  * [Decryption](#decryption)
+  * [Ciphertext Addition](#ciphertext-addition)
+  * [Constant Multiplication](#constant-multiplication)
+- [References](#references)
+- [Example](#example)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+
 ## Security Assumption
 
-Given:
+- Given:
+  1. A random matrix $A \in \mathbb{Z}_q^{n \times m}$.  
+  2. A secret vector $\vec{s} \in \mathbb{Z}_q^n$, chosen uniformly at random.  
+  3. An error vector $\vec{e} \in \mathbb{Z}_q^m$, where entries are small ("short").  
 
-- A randomly chosen matrix $A \in \mathbb{Z}_q^{n \times m}$
-- A vector $\vec{s} \in \mathbb{Z}_q^n$, chosen uniformly at random
-- A vector $\vec{e} \in \mathbb{Z}_q^m$, chosen at random from a set of "short" vectors.
+- Computation:
 
-Let:
+  - Define the vector:  
+  
+    $b = A^T \vec{s} + \vec{e}$
 
-$b = A^{T} \vec{s} + \vec{e}$
+- Combine $A$ and $b^T$ into an augmented matrix:  
 
-The problem of recovering $\vec{s}$ from:
+  $\bar{A} = (A, b^T) \in \mathbb{Z}_q^{(n+1) \times m}$
 
-$\bar{A} = (A, b^{T}) \in \mathbb{Z}_q^{(n + 1) \times m}$
 
-is known as the ["Learning With Errors" (LWE)](https://en.wikipedia.org/wiki/Learning_with_errors) problem. This is an average-case variant of the [bounded distance decoding (BDD)](https://en.wikipedia.org/wiki/Lattice_problem#Bounded_distance_decoding) problem for a random $q$-ary lattice:
+### The LWE Problem
 
-$\Lambda_q(A) = \lbrace A^T x \ | \ x \in \mathbb{Z}_q^n \rbrace + q \mathbb{Z}^m,$
+Recovering the secret vector $\vec{s}$ from the augmented matrix $\bar{A}$ is computationally hard.
 
-with target vector $b$.
+This problem is called the **Learning With Errors (LWE)** problem.  
+
+It is closely related to finding the [closest vector](https://en.wikipedia.org/wiki/Lattice_problem#Closest_vector_problem_(CVP)) in a random $q$-ary [lattice](https://en.wikipedia.org/wiki/Lattice_(group)):
+
+$\Lambda_q(A) = \{ A^T x \ | \ x \in \mathbb{Z}_q^n \} + q \mathbb{Z}^m$
+
+given a noisy target vector $b$.
+
+
+### Why is LWE Hard?
+The noise $\vec{e}$ makes solving **LWE** much harder than a simple linear system, turning it into a [lattice-based decoding](https://en.wikipedia.org/wiki/Lattice-based_cryptography) problem. This hardness forms the basis of many cryptographic schemes.
+
 
 ## LWE and RLWE (GLWE)
 
@@ -52,7 +90,7 @@ And:
 
 - $\Delta = q / p$, the scaling factor.
 
-#### Explicitly:
+**Explicitly:**
 
 - For **LWE**:
   - $k = n \in \mathbb{Z}$
@@ -62,9 +100,7 @@ And:
   - $k = 1$
   - $N$ is a power of 2.
 
----
-
-### Notes
+**Notes:**
 
 - $GLWE$ generalizes both LWE and RLWE.
 - The noise $E$ must remain small enough to ensure decryption correctness, typically constrained by $\Delta / 2$.
@@ -103,15 +139,59 @@ And:
 
 ---
 
-### References
+### Ciphertext Addition
 
-- [Fully Homomorphic Encryption](https://cseweb.ucsd.edu/classes/fa17/cse206A-a/LecFHE.pdf)
-- [TFHE Deep Dive - Part I - Ciphertext types](https://www.zama.ai/post/tfhe-deep-dive-part-1)
-- [003 TFHE Deep Dive w/ Ilaria Chillotti](https://www.youtube.com/watch?v=npoHSR6-oRw)
+1. Consider:
+
+    $C' = GLWE_{\vec S, \sigma}(\Delta M') = (A'_0, ..., A'_{k-1}, B') \subseteq \mathcal{R}_{q}^{k+1}$
+
+2. Perform addition:
+
+    $C^{(+)} = C + C'$
+
+    $= (A_{0} + A'_{0}, ...,A_{k-1} + A'_{k-1}, B + B')$
+
+    $= GLWE_{\vec S, \sigma'}(\Delta (M + M')) \subseteq \mathcal{R}_{q}^{k+1}$
+
+3. New error standard deviation $\sigma'$ (error growth):
+
+    $\sigma' = \sqrt{\sigma^2 + \sigma^2} = \sqrt{2\sigma^2}$
+
+    $= \sqrt{2} \cdot \sigma$
 
 ---
 
-### Example
+### Constant Multiplication
+
+1. Consider $\Lambda$ a small constant polynomial or a scalar in $\mathbb{Z}$:
+
+    - $\Lambda = \sum_{i=0}^{N-1} \Lambda_{i}X^{i} \in R$ 
+    
+      or:
+
+    - $\Lambda \in \mathbb{Z}$
+
+2. Perform multiplication:
+
+    $C^{(\cdot)} = \Lambda \cdot C$
+
+    $= (\Lambda \cdot A_0, ..., \Lambda \cdot A_{k-1}, \Lambda \cdot B)$
+
+      $= GLWE_{\vec S, \sigma''}(\Delta (\Lambda \cdot M)) \subseteq \mathcal{R}_{q}^{k+1}$
+
+3. Error growth:
+
+    $\sigma'' = |\Lambda| \cdot \sigma$
+
+## References
+
+- [Fully Homomorphic Encryption](https://cseweb.ucsd.edu/classes/fa17/cse206A-a/LecFHE.pdf)
+- [TFHE Deep Dive - Part I - Ciphertext types](https://www.zama.ai/post/tfhe-deep-dive-part-1)
+- [TFHE Deep Dive - Part II - Encodings and linear leveled operations](https://www.zama.ai/post/tfhe-deep-dive-part-2)
+- [003 TFHE Deep Dive w/ Ilaria Chillotti](https://www.youtube.com/watch?v=npoHSR6-oRw)
+
+
+## Example
 
 - Set up:
   - $q=64$, $p=4$
