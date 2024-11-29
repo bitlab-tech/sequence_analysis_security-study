@@ -51,7 +51,7 @@ This problem is called the **Learning With Errors (LWE)** problem.
 
 It is closely related to finding the [closest vector](https://en.wikipedia.org/wiki/Lattice_problem#Closest_vector_problem_(CVP)) in a random $q$-ary [lattice](https://en.wikipedia.org/wiki/Lattice_(group)):
 
-$\Lambda_q(A) = \{ A^T x \ | \ x \in \mathbb{Z}_q^n \} + q \mathbb{Z}^m$
+$\Lambda_q(A) = \lbrace A^T x \ | \ x \in \mathbb{Z}_q^n \rbrace + q \mathbb{Z}^m$
 
 given a noisy target vector $b$.
 
@@ -143,7 +143,8 @@ And:
 
 1. Consider:
 
-    $C' = GLWE_{\vec S, \sigma}(\Delta M') = (A'_0, ..., A'_{k-1}, B') \subseteq \mathcal{R}_{q}^{k+1}$
+    $C' = GLWE_{\vec S, \sigma}(\Delta M')$
+    $= (A_0^{'}, ..., A'_{k-1}, B') \subseteq \mathcal{R}_{q}^{k+1}$
 
 2. Perform addition:
 
