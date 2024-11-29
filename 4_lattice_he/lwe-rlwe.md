@@ -143,8 +143,9 @@ And:
 
 1. Consider:
 
-    $C' = GLWE_{\vec S, \sigma}(\Delta M')$
-    $= (A_0^{'}, ..., A'_{k-1}, B') \subseteq \mathcal{R}_{q}^{k+1}$
+    $C' = GLWE_{\vec S, \sigma}(\Delta M') \subseteq \mathcal{R}_{q}^{k+1}$
+
+    $= (A'_0, ..., A'_{k-1}, B')$
 
 2. Perform addition:
 
