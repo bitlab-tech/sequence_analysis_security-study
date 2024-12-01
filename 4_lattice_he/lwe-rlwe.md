@@ -4,7 +4,7 @@
 
 This document provides a structured exploration of the [Learning With Errors (LWE)](https://en.wikipedia.org/wiki/Learning_with_errors) and [Ring Learning With Errors (RLWE)](https://en.wikipedia.org/wiki/Ring_learning_with_errors) problems, foundational concepts in [lattice-based cryptography](https://en.wikipedia.org/wiki/Lattice-based_cryptography). 
 
-**LWE** and **RLWE** are the building blocks of advanced cryptographic systems like [Fully Homomorphic Encryption (FHE)](https://en.wikipedia.org/wiki/Homomorphic_encryption), enabling secure computation on encrypted data. This document connects theory to practice with references to seminal works and implementations.
+**LWE** and **RLWE** are the building blocks of advanced cryptographic systems like [Fully Homomorphic Encryption (FHE)](https://en.wikipedia.org/wiki/Homomorphic_encryption#Fully_homomorphic_encryption), enabling secure computation on encrypted data. This document connects theory to practice with references to seminal works and implementations.
 
 Explore these concepts to understand the interplay between mathematical structures and cryptographic operations essential for [post-quantum security](https://en.wikipedia.org/wiki/Post-quantum_cryptography).
 
@@ -143,7 +143,9 @@ And:
 
 1. Consider:
 
-    $C' = \text{GLWE}_{\mathbf{S}, \sigma}(\Delta M') \subseteq R_q^{k+1} = (A_0', \dots, A_{k-1}', B')$
+    $C' = \text{GLWE}_{\mathbf{S}, \sigma}(\Delta M') \subseteq R_q^{k+1}$
+    
+    $C' = (A_0', \dots, A_{k-1}', B')$
 
 2. Perform addition:
 
