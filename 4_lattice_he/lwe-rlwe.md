@@ -57,7 +57,7 @@ given a noisy target vector $b$.
 
 
 ### Why is LWE Hard?
-The noise $\vec{e}$ makes solving **LWE** much harder than a simple linear system, turning it into a [lattice-based decoding](https://en.wikipedia.org/wiki/Lattice-based_cryptography) problem. This hardness forms the basis of many cryptographic schemes.
+The noise $\vec{e}$ makes solving **LWE** much harder than a simple linear system, turning it into a [lattice-based decoding problem](https://en.wikipedia.org/wiki/Lattice_problem). This hardness forms the basis of many cryptographic schemes.
 
 
 ## LWE and RLWE (GLWE)
@@ -143,47 +143,46 @@ And:
 
 1. Consider:
 
-    $C' = GLWE_{\vec S, \sigma}(\Delta M') \subseteq \mathcal{R}_{q}^{k+1}$
-
-    $= (A'_0, ..., A'_{k-1}, B')$
+    $C' = \text{GLWE}_{\mathbf{S}, \sigma}(\Delta M') \subseteq R_q^{k+1} = (A_0', \dots, A_{k-1}', B')$
 
 2. Perform addition:
 
     $C^{(+)} = C + C'$
 
-    $= (A_{0} + A'_{0}, ...,A_{k-1} + A'_{k-1}, B + B')$
+    $C^{(+)} = (A_0 + A_0', \dots, A_{k-1} + A_{k-1}', B + B')$
 
-    $= GLWE_{\vec S, \sigma'}(\Delta (M + M')) \subseteq \mathcal{R}_{q}^{k+1}$
+    Equivalently:
 
-3. New error standard deviation $\sigma'$ (error growth):
+    $C^{(+)} = \text{GLWE}_{\mathbf{S}, \sigma'}(\Delta(M + M')) \subseteq R_q^{k+1}$
 
-    $\sigma' = \sqrt{\sigma^2 + \sigma^2} = \sqrt{2\sigma^2}$
+3. The error standard deviation grows during addition as follows:
 
-    $= \sqrt{2} \cdot \sigma$
+    $\sigma' = \sqrt{\sigma^2 + \sigma^2} = \sqrt{2\sigma^2} = \sqrt{2} \cdot \sigma$
 
 ---
 
 ### Constant Multiplication
 
-1. Consider $\Lambda$ a small constant polynomial or a scalar in $\mathbb{Z}$:
+1. Let $\Lambda$ be a small constant polynomial or a scalar in $\mathbb{Z}$:
+   - $\Lambda = \sum_{i=0}^{N-1} \Lambda_i X^i \in R$
 
-    - $\Lambda = \sum_{i=0}^{N-1} \Lambda_{i}X^{i} \in R$ 
-    
-      or:
-
-    - $\Lambda \in \mathbb{Z}$
+     or:
+   - $\Lambda \in \mathbb{Z}$
 
 2. Perform multiplication:
 
-    $C^{(\cdot)} = \Lambda \cdot C$
+   $C^{(\cdot)} = \Lambda \cdot C$
 
-    $= (\Lambda \cdot A_0, ..., \Lambda \cdot A_{k-1}, \Lambda \cdot B)$
+   $C^{(\cdot)} = (\Lambda \cdot A_0, \dots, \Lambda \cdot A_{k-1}, \Lambda \cdot B)$
 
-      $= GLWE_{\vec S, \sigma''}(\Delta (\Lambda \cdot M)) \subseteq \mathcal{R}_{q}^{k+1}$
+   Equivalently:
+
+   $C^{(\cdot)} = \text{GLWE}_{\mathbf{S}, \sigma''}(\Delta (\Lambda \cdot M)) \subseteq \mathcal{R}_q^{k+1}$
 
 3. Error growth:
 
-    $\sigma'' = |\Lambda| \cdot \sigma$
+   $\sigma'' = |\Lambda| \cdot \sigma$
+
 
 ## References
 
