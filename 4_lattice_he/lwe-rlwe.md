@@ -197,37 +197,35 @@ And:
 ## Example
 
 - Set up:
-  - $q=64$, $p=4$
-  - $\Delta = q/p = 16$
-  - $N = 4$
-  - $k = 2$
+  - $q=\color{red}{64}$, $p=\color{red}{4}$
+  - $\Delta = q/p = \color{red}{16}$
+  - $N = \color{red}{4}$
+  - $k = \color{red}{2}$
 
   - $\vec{S}$ in uniform binary distribution $= (S_{0}, S{1})$
 
-    $= (0 + 0X + 1X^{2} + 1X^{3}, 1 + 0X^{2} + 1X^{3}) \in R^{2}$
+    $= \color{red}{(0 + 0X + 1X^{2} + 1X^{3}, 1 + 0X^{2} + 1X^{3}) \in R^{2}}$
 
   - $\vec{A} = (A_{0}, A_{1})$ with coefficients in $\lbrace -32, -31, ..., 0, ..., 30, 31 \rbrace \in R_{q}^{k}$
 
-    $= (17 + 5X - 30X^{2} + 7X^{3}, 23 + 7X + 27X^{2} - 4X^{3})$
+    $= \color{red}{(17 + 5X - 30X^{2} + 7X^{3}, 23 + 7X + 27X^{2} - 4X^{3})}$
 
-  - $E= 1 + 0X + 1X^{3}  \in R_{q} $
+  - $E= \color{red}{1 + 0X + 1X^{3}  \in R_{q}}$
 
   **Message $M$ is:**
 
-  - $M \in R_{p} = -2 + 0 \cdot X + 1 \cdot X^{2} - 1 \cdot X^{3}$
+  - $M \in R_{p} = \color{red}{-2 + 0 \cdot X + 1 \cdot X^{2} - 1 \cdot X^{3}}$
 
   **Message $M'$ (for homomorphic addition) is:**
 
-  - $M' \in R_{p} = 0 + 0 \cdot X + 1 \cdot X^{2} - 2 \cdot X^{3}$
+  - $M' \in R_{p} = \color{red}{0 + 0 \cdot X + 1 \cdot X^{2} - 2 \cdot X^{3}}$
 
-
+  ---
 - Encryption:
-  - $C = (A_{0}, A_{1}, B) \in R_{q}$
-  - $B = AS + \Delta M + E$
+  - $\color{red}{C = (A_{0}, A_{1}, B) \in R_{q}}$
+  - $\color{red}{B = AS + \Delta M + E} = A_{0}S_{0} + A_{1}S_{1} + \Delta M + E$
 
-    $= A_{0}S_{0} + A_{1}S_{1} + \Delta M + E$
-
-      - $A_{0}S_{0} = (17 + 5X - 30X^{2} + 7X^{3})(X^{2} + X^{3})$
+      - $\color{blue}{A_{0}S_{0}}$ $= (17 + 5X - 30X^{2} + 7X^{3})(X^{2} + X^{3})$
 
         $= 17X^{2} + 17X^{3} + 5X^{3} + 5X^{4} - 30X^{4} - 30X^{5} + 7X^{5} + 7X^{6}$
 
@@ -245,7 +243,7 @@ And:
 
         $= 25 + 23X + 10X^{2} + 22X^{3} \in R_{q}$
 
-      - $A_{1}S_{1} = (23 + 7X + 27X^{2} - 4X^{3})(1 + X^{3})$
+      - $\color{blue}{A_{1}S_{1}}$ $= (23 + 7X + 27X^{2} - 4X^{3})(1 + X^{3})$
 
         $= 23 + 23X^3 + 7X + 7X^{4} + 27X^{2} + 27 X^{5} - 4X^{3} - 4X^{6}$
 
@@ -261,24 +259,26 @@ And:
 
         $= 16 - 20X + 31X^{2} + 19X^{3}$
 
-      - $\Delta M = 16M = 16(-2 + X^{2} - X^{3}) = -32 + 16X^{2} - 16X^{3}$
+      - $\color{blue}{\Delta M}$ $= 16M = 16(-2 + X^{2} - X^{3}) = -32 + 16X^{2} - 16X^{3}$
 
     So:
 
-    $B = A_{0}S_{0} + A_{1}S_{1} + \Delta M + E$
+    $\color{red}{B = A_{0}S_{0} + A_{1}S_{1} + \Delta M + E}$
 
     $= (25 + 23X + 10X^{2} + 22X^{3}) + (16 - 20X + 31X^{2} + 19X^{3}) + (-32 + 16X^{2} - 16X^{3}) + (1 + X^{3})$
 
-    $= 10 + 3X + 57X^{2} + 26 X^{3}$
+    $= \color{green}{10 + 3X + 57X^{2} + 26 X^{3}}$
 
-  - **Cipher text** $(A_{0}, A_{1}, B)$ is:
+  - **Cipher text** $\color{red}{(A_{0}, A_{1}, B)}$ is:
 
-    $(17 + 5X - 30X^{2} + 7X^{3}, 23 + 7X + 27X^{2} - 4X^{3}, 10 + 3X + 57X^{2} + 26 X^{3})$
+    $\color{green}{\boxed{(17 + 5X - 30X^{2} + 7X^{3}, 23 + 7X + 27X^{2} - 4X^{3}, 10 + 3X + 57X^{2} + 26 X^{3})}}$
+
+  ---
 
 - Decryption:
-  - $M = \lfloor (\Delta M + E)/\Delta \rceil$
+  - $\color{red}{M = \lfloor (\Delta M + E)/\Delta \rceil}$
 
-    - $\Delta M + E = B - \sum_{i = 0}^{k - 1} A_{i}S{i}$
+    - $\color{blue}{\Delta M + E = B - \sum_{i = 0}^{k - 1} A_{i}S{i}}$
 
       $=(10 + 3X + 57X^{2} + 26X^{3}) - ((25 + 23X + 10X^{2} + 22X^{3}) + (16 - 20X + 31X^{2} + 19X^{3}))$
 
@@ -286,34 +286,36 @@ And:
 
       $= 10 + 3X + 57X^{2} + 26X^{3} - 41 - 3X - 41X^{2} - 41X^{3}$
 
-      $= -31 + 16X^{2} - 15X^{3}$
+      $= \color{green}{-31 + 16X^{2} - 15X^{3}}$
 
-  - $\lfloor (\Delta M + E) / \Delta \rceil = \lfloor \frac{-31 + 16X^{2} - 15X^{3}}{16} \rceil$
+  - $\color{red}{\lfloor (\Delta M + E) / \Delta \rceil = \lfloor \frac{-31 + 16X^{2} - 15X^{3}}{16} \rceil}$
 
       $= \lfloor -\frac{31}{16} + \frac{16}{16}X^{2} - \frac{15}{16}X^{3} \rceil$
 
-      $= -2 + X^2 - X^3 = M$
+      $= \color{green}{\boxed{-2 + X^2 - X^3}}$ $= \color{green}{\boxed{M}}$
+
+  ---
 
 - Ciphertext Addition:
-  - Recall that $M' = X^2 - 2X^3 \in R_q$
-  - $M^{(+)} = M + M'$
+  - Recall that $\color{red}{M' = X^2 - 2X^3 \in R_q}$
+  - $\color{red}{M^{(+)} = M + M'}$
 
     $= -2 + X^2 - X^3 + X^2 - 2X^3$
 
-    $= -2 + 2X^2 -3X^3$
+    $= \color{green}{-2 + 2X^2 -3X^3}$
 
   - Let's choose:
 
-    $\vec{A'} = (A_0',A_1')$
+    $\vec{A'} = (A_0',A_1')= \color{red}{(9 + 20X + X^2 - X^3, -6 - 4X + 13X^2 -3X^3) \in R_q^2}$
 
-    $= (9 + 20X + X^2 - X^3, -6 - 4X + 13X^2 -3X^3) \in R_q^2$
+    $E' = \color{red}{5 + X + 2X^2}$
 
-    $E' = 5 + X + 2X^2$
+  ---
 
   - Encrypt $M'$:
-    - $C' = (A_0', A_1', B') \in R_q$
-    - $B' = A_0'S_0 + A_1'S_1 + \Delta M' + E'$
-      - $A_0'S_0 = (9 + 20X + X^2 - X^3)(X^2 + X^3)$
+    - $\color{red}{C' = (A_0', A_1', B') \in R_q}$
+    - $\color{blue}{B' = A_0'S_0 + A_1'S_1 + \Delta M' + E'}$
+      - $\color{blue}{A_0'S_0}$ $= (9 + 20X + X^2 - X^3)(X^2 + X^3)$
 
         $= 9X^2 + 9X^3 + 20X^3 + 20X^4 + X^4 + X^5 - X^5 - X^6$
 
@@ -329,7 +331,7 @@ And:
 
         $= -21 + 10X^2 + 29X^3$
 
-      - $A_1'S_1 = (-6 -4X + 13X^2 - 3X^3)(1 + X^3)$
+      - $\color{blue}{A_1'S_1}$ $= (-6 -4X + 13X^2 - 3X^3)(1 + X^3)$
 
         $= -6 -6X^3 -4X - 4X^4 + 13X^2 + 13X^5 - 3X^3 - 3X^6$
 
@@ -343,13 +345,11 @@ And:
 
         $= -2 -17X +16X^2 -9X^3$
 
-      - $\Delta M' = 16(X^2 - 2X^3)$
-
-        $= 16X^2 - 32X^3$
+      - $\color{blue}{\Delta M'}$ $= 16(X^2 - 2X^3)= 16X^2 - 32X^3$
 
       So:
 
-      $B' = A_0'S_0 + A_1'S_1 + \Delta M' + E'$
+      $\color{blue}{B' = A_0'S_0 + A_1'S_1 + \Delta M' + E'}$
 
       $= (-21 + 10X^2 + 29X^3) + (-2 -17X +16X^2 -9X^3) + (16X^2 - 32X^3) + (5 + X + 2X^2)$
 
@@ -359,39 +359,43 @@ And:
 
       $= -18 - 16X + 44X^2 - 12X^3$
 
-    - **Ciphertext** $(A_0', A_1', B')$ is:
+    - **Ciphertext** $\color{red}{(A_0', A_1', B')}$ is:
 
-      $(9 + 20X + X^2 - X^3, -6 -4X + 13X^2 - 3X^3, -18 - 16X + 44X^2 - 12X^3)$
+      $\color{green}{\boxed{(9 + 20X + X^2 - X^3, -6 -4X + 13X^2 - 3X^3, -18 - 16X + 44X^2 - 12X^3)}}$
+
+  ---
 
   - Perform addition:
 
-    $C^{(+)} = C + C' = (A_0 + A_0', A_1 + A_1', B + B')$
+    $\color{red}{C^{(+)} = C + C' = (A_0 + A_0', A_1 + A_1', B + B')}$
 
-      - $A_0 + A_0' = 17 + 5X - 30X^{2} + 7X^{3} + 9 + 20X + X^2 - X^3$
+      - $\color{blue}{A_0 + A_0'}$ $= 17 + 5X - 30X^{2} + 7X^{3} + 9 + 20X + X^2 - X^3$
 
         $= 26 + 25X - 29X^2 + 6X^3$
 
-      - $A_1 + A_1' = 23 + 7X + 27X^{2} - 4X^{3} + (-6 - 4X + 13X^2 -3X^3)$
+      - $\color{blue}{A_1 + A_1'}$ $= 23 + 7X + 27X^{2} - 4X^{3} + (-6 - 4X + 13X^2 -3X^3)$
 
         $= 17 + 3X + 40X^2 - 7X^3$
 
-      - $B + B' = 10 + 3X + 57X^{2} + 26 X^{3} + (-18 - 16X + 44X^2 - 12X^3)$
+      - $\color{blue}{B + B'}$ $= 10 + 3X + 57X^{2} + 26 X^{3} + (-18 - 16X + 44X^2 - 12X^3)$
 
         $= -8 - 13X + 101X^2 + 14X^3$
 
-    $C^{(+)} = (A_0^{(+)}, A_1^{(+)}, B^{(+)})$
+    $\color{red}{C^{(+)} = (A_0^{(+)}, A_1^{(+)}, B^{(+)})}$
 
-    $= (26 + 25X -29X^2 + 6X^3, 17 + 3X + 40X^2 - 7X^3, -8 - 13X + 101X^2 + 14X^3)$
+    $=\color{green}{\boxed{(26 + 25X -29X^2 + 6X^3, 17 + 3X + 40X^2 - 7X^3, -8 - 13X + 101X^2 + 14X^3)}}$
 
-  - Decrypt the result:
+  ---
 
-    $M^{(+)} = \lfloor (\Delta M^{(+)} + E^{(+)})/\Delta \rceil$
+  - Decrypt the ciphertext addition result:
 
-      - $\Delta M^{(+)} + E^{(+)} = B^{(+)} - \sum_{i=0}^{k-1}A_{i}^{(+)} \cdot S_i$
+    $\color{red}{M^{(+)} = \lfloor (\Delta M^{(+)} + E^{(+)})/\Delta \rceil}$
 
-        $\Delta M^{(+)} + E^{(+)} = B^{(+)} - (A_0^{(+)}S_0 + A_1^{(+)}S_1)$
+      - $\color{blue}{\Delta M^{(+)} + E^{(+)} = B^{(+)} - \sum_{i=0}^{k-1}A_{i}^{(+)} \cdot S_i}$
 
-        - $A_0^{(+)}S_0 = (26 + 25X -29X^2 + 6X^3)(X^2 + X^3)$
+        $= B^{(+)} - (A_0^{(+)}S_0 + A_1^{(+)}S_1)$
+
+        - $\color{blue}{A_0^{(+)}S_0}$ $= (26 + 25X -29X^2 + 6X^3)(X^2 + X^3)$
 
           $=26X^2 + 26X^3 + 25X^3 + 25X^4 - 29X^4 - 29X^5 + 6X^5 + 6X^6$
 
@@ -405,7 +409,7 @@ And:
 
           $= 4 + 23X + 20X^2 + 51X^3$
 
-        - $A_1^{(+)}S_1 = (17 + 3X + 40X^2 - 7X^3)(1 + X^3)$
+        - $\color{blue}{A_1^{(+)}S_1}$ $= (17 + 3X + 40X^2 - 7X^3)(1 + X^3)$
 
           $=17 + 17X^3 + 3X + 3X^4 + 40X^2 + 40X^5 -7X^3 - 7X^6$
 
@@ -419,7 +423,7 @@ And:
 
           $= 14 - 37X + 47X^2 + 10X^3$
 
-        - $\Delta M^{(+)} + E^{(+)} = B^{(+)} - (A_0^{(+)}S_0 + A_1^{(+)}S_1)$
+        - $\color{blue}{\Delta M^{(+)} + E^{(+)} = B^{(+)} - (A_0^{(+)}S_0 + A_1^{(+)}S_1)}$
 
           $= -8 - 13X + 101X^2 + 14X^3 - (4 + 23X + 20X^2 + 51X^3 + 14 - 37X + 47X^2 + 10X^3)$
 
@@ -429,10 +433,11 @@ And:
 
           $= -26 + X + 34X^2 - 47X^3$
 
-        - $M^{(+)} = \lfloor (\Delta M^{(+)} + E^{(+)})/\Delta \rceil$
+      - $\color{red}{M^{(+)} = \lfloor (\Delta M^{(+)} + E^{(+)})/\Delta \rceil}$
 
           $= \lfloor \frac{-26 + X + 34X^2 - 47X^3}{16} \rceil$
 
           $= \lfloor -\frac{26}{16} + \frac{X}{16} + \frac{34X^2}{16} - \frac{47X^3}{16} \rceil$
 
-          $= -2 + 2X^2 - 3X^3 = M + M' = M^{(+)}$
+          $= \color{green}{\boxed{-2 + 2X^2 - 3X^3}}$ $= \color{green}{\boxed{M + M' = M^{(+)}}}$
+  ---
