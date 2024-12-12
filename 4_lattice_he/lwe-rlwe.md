@@ -397,7 +397,7 @@ And:
 
           $= 26X^2 + 51X^3 - 4X^4 - 23X^5 + 6X^6$
 
-          Replace X^4 with -1:
+          Replace $X^4$ with $-1$:
 
           $= 26X^2 +  51X^3 - 4(-1) - 23X(-1) + 6X^2(-1)$
 
@@ -411,7 +411,7 @@ And:
 
           $= 17 + 3X + 40X^2 + 10X^3 + 3X^4 + 40X^5 - 7X^6$
 
-          Replace X^4 with -1:
+          Replace $X^4$ with $-1$:
 
           $= 17 + 3X + 40X^2 + 10X^3 + 3(-1) + 40X(-1) - 7X^2(-1)$
 
@@ -433,6 +433,6 @@ And:
 
           $= \lfloor \frac{-26 + X + 34X^2 - 47X^3}{16} \rceil$
 
-          $= \lfloor -\frac{-26}{16} + \frac{X}{16} + \frac{34X^2}{16} - \frac{47X^3}{16} \rceil$
+          $= \lfloor -\frac{26}{16} + \frac{X}{16} + \frac{34X^2}{16} - \frac{47X^3}{16} \rceil$
 
           $= -2 + 2X^2 - 3X^3 = M + M' = M^{(+)}$
