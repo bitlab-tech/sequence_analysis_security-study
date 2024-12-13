@@ -5,24 +5,23 @@ use tfhe::{
     generate_keys,
     set_server_key,
     ClientKey,
-    FheUint32,
-    FheUint32Id,
+    FheUint16,
+    FheUint16Id,
     FheUint,
     FheBool
 };
 use rayon::prelude::*;
 use std::time::Instant;
 
-fn equality_test(query_kmer: &FheUint<FheUint32Id>, subject_kmer: &str, seed: u32) -> FheBool {
-    let subject_kmer_hash: u32 = murmur32(subject_kmer.as_bytes(), seed);
-    query_kmer.eq(subject_kmer_hash)
+fn equality_test(query_kmer: &FheUint<FheUint16Id>, subject_kmer: &str) -> FheBool {
+    let subject_kmer_hash: KmerType = binary_encode(subject_kmer);
+    query_kmer.eq(subject_kmer_hash.to_u16())
 }
 
 fn snp_compare_single<'a>(
-    query_kmers: &'a Vec<FheUint<FheUint32Id>>,
+    query_kmers: &'a Vec<FheUint<FheUint16Id>>,
     k: usize,
-    subjects: &'a Vec<&str>,
-    seed: u32
+    subjects: &'a Vec<&str>
 ) -> Vec<FheBool> {
     let results = query_kmers.iter().map(|query_kmer| {
         subjects
@@ -30,7 +29,7 @@ fn snp_compare_single<'a>(
             .map(|subject| {
                 k_mer_lazy(&subject, k)
                     .map(|subject_kmer| {
-                        equality_test(query_kmer, subject_kmer, seed)
+                        equality_test(query_kmer, subject_kmer)
                     })
                     .reduce(|a, b| a | b)
                     .unwrap()
@@ -43,10 +42,9 @@ fn snp_compare_single<'a>(
 }
 
 fn snp_compare_parallel<'a>(
-    query_kmers: &'a Vec<FheUint<FheUint32Id>>,
+    query_kmers: &'a Vec<FheUint<FheUint16Id>>,
     k: usize,
-    subjects: &'a Vec<&str>,
-    seed: u32
+    subjects: &'a Vec<&str>
 ) -> Vec<FheBool> {
     let results = query_kmers.par_iter().map(| query_kmer | {
         subjects
@@ -54,7 +52,7 @@ fn snp_compare_parallel<'a>(
             .map(|subject| {
                 k_mer_lazy(&subject, k)
                     .map(|subject_kmer| {
-                        equality_test(query_kmer, subject_kmer, seed)
+                        equality_test(query_kmer, subject_kmer)
                     })
                     .reduce(|a, b| a | b)
                     .unwrap()
@@ -74,72 +72,209 @@ fn k_mer_lazy<'a>(seq: &'a str, k: usize) -> impl Iterator<Item = &'a str> {
     (0..(l - k)).map(move |i: usize| &seq[i..i + k])
 }
 
-fn encrypt_kmer_hashes(kmer_hashes: &Vec<u32>, client_key: &ClientKey) -> Vec<FheUint<FheUint32Id>> {
+fn encrypt_kmer_hashes(kmer_hashes: &Vec<KmerType>, client_key: &ClientKey) -> Vec<FheUint<FheUint16Id>> {
     kmer_hashes
         .par_iter()
-        .map(|kmer_hash| FheUint32::try_encrypt(kmer_hash.clone(), client_key).unwrap())
+        .map(|kmer_hash| FheUint16::encrypt(kmer_hash.to_u16(), client_key))
         .collect()
 }
 
-fn murmur32(key: &[u8], seed: u32) -> u32 {
-    const C1: u32 = 0xcc9e2d51;
-    const C2: u32 = 0x1b873593;
-    const R1: u32 = 15;
-    const R2: u32 = 13;
-    const M: u32 = 5;
-    const N: u32 = 0xe6546b64;
+use std::fmt::{self, Binary, Debug, Error, Formatter};
+use std::ops::{BitAnd, BitAndAssign, BitOr, BitOrAssign, BitXorAssign, Shl, Shr};
 
-    let mut hash: u32 = seed ^ (key.len() as u32);
-    let mut i = 0;
-    // first step: take care of data in groups of 4 bytes
-    while i + 4 <= key.len() {
-        let mut k: u32 = u32::from_le_bytes([
-            key[i],
-            key[i + 1],
-            key[i + 2],
-            key[i + 3],
-        ]);
-
-        k = k.wrapping_mul(C1);
-        k = k.rotate_left(R1);
-        k = k.wrapping_mul(C2);
-
-        hash ^= k;
-        hash = hash.rotate_left(R2);
-        hash = hash.wrapping_mul(M).wrapping_add(N);
-
-        i += 4;
-    }
-
-    // second step: take care of the remaining 1 to 3 bytes, if any
-    if i < key.len() {
-        let mut k: u32 = 0;
-        let mut j = 0;
-
-        while i < key.len() {
-            k ^= u32::from(key[i]) << j;
-            i += 1;
-            j += 8;
-        }
-
-        k = k.wrapping_mul(C1);
-        k = k.rotate_left(R1);
-        k = k.wrapping_mul(C2);
-
-        hash ^= k;
-    }
-
-    // as a last step, a final scramble
-    hash ^= key.len() as u32;
-    hash ^= hash >> 16;
-    hash = hash.wrapping_mul(0x85ebca6b);
-    hash ^= hash >> 13;
-    hash = hash.wrapping_mul(0xc2b2ae35);
-    hash ^= hash >> 16;
-
-    hash
+#[derive(PartialEq, Eq)]
+enum KmerType {
+    U8(u8),
+    U16(u16),
+    U32(u32),
+    U64(u64),
+    U128(u128)
 }
 
+impl Shl<usize> for KmerType {
+    type Output = KmerType;
+
+    fn shl(self, rhs: usize) -> KmerType {
+        match self {
+            KmerType::U8(val) => KmerType::U8(val << rhs),
+            KmerType::U16(val) => KmerType::U16(val << rhs),
+            KmerType::U32(val) => KmerType::U32(val << rhs),
+            KmerType::U64(val) => KmerType::U64(val << rhs),
+            KmerType::U128(val) => KmerType::U128(val << rhs),
+        }
+    }
+}
+
+impl Shr<usize> for KmerType {
+    type Output = KmerType;
+
+    fn shr(self, rhs: usize) -> KmerType {
+        match self {
+            KmerType::U8(val) => KmerType::U8(val >> rhs),
+            KmerType::U16(val) => KmerType::U16(val >> rhs),
+            KmerType::U32(val) => KmerType::U32(val >> rhs),
+            KmerType::U64(val) => KmerType::U64(val >> rhs),
+            KmerType::U128(val) => KmerType::U128(val >> rhs),
+        }
+    }
+}
+
+impl BitOr for KmerType {
+    type Output = KmerType;
+
+    fn bitor(self, rhs: Self) -> Self::Output {
+        match (self, rhs) {
+            (KmerType::U8(a), KmerType::U8(b)) => KmerType::U8(a | b),
+            (KmerType::U16(a), KmerType::U16(b)) => KmerType::U16(a | b),
+            (KmerType::U32(a), KmerType::U32(b)) => KmerType::U32(a | b),
+            (KmerType::U64(a), KmerType::U64(b)) => KmerType::U64(a | b),
+            (KmerType::U128(a), KmerType::U128(b)) => KmerType::U128(a | b),
+            _ => panic!("Bitwise OR is not supported for mismatched KmerType variants"),
+        }
+    }
+}
+
+impl BitAnd for KmerType {
+    type Output = KmerType;
+
+    fn bitand(self, rhs: Self) -> Self::Output {
+        match (self, rhs) {
+            (KmerType::U8(a), KmerType::U8(b)) => KmerType::U8(a & b),
+            (KmerType::U16(a), KmerType::U16(b)) => KmerType::U16(a & b),
+            (KmerType::U32(a), KmerType::U32(b)) => KmerType::U32(a & b),
+            (KmerType::U64(a), KmerType::U64(b)) => KmerType::U64(a & b),
+            (KmerType::U128(a), KmerType::U128(b)) => KmerType::U128(a & b),
+            _ => panic!("Bitwise AND is not supported for mismatched KmerType variants"),
+        }
+    }
+}
+
+impl BitOrAssign<KmerType> for KmerType {
+    fn bitor_assign(&mut self, rhs: Self) {
+        match (self, rhs) {
+            (KmerType::U8(a), KmerType::U8(b)) => *a |= b,
+            (KmerType::U16(a), KmerType::U16(b)) => *a |= b,
+            (KmerType::U32(a), KmerType::U32(b)) => *a |= b,
+            (KmerType::U64(a), KmerType::U64(b)) => *a |= b,
+            (KmerType::U128(a), KmerType::U128(b)) => *a |= b,
+            _ => panic!("Bitwise OR is not supported for mismatched KmerType variants"),
+        }
+    }
+}
+
+impl BitAndAssign<KmerType> for KmerType {
+    fn bitand_assign(&mut self, rhs: Self) {
+        match (self, rhs) {
+            (KmerType::U8(a), KmerType::U8(b)) => *a &= b,
+            (KmerType::U16(a), KmerType::U16(b)) => *a &= b,
+            (KmerType::U32(a), KmerType::U32(b)) => *a &= b,
+            (KmerType::U64(a), KmerType::U64(b)) => *a &= b,
+            (KmerType::U128(a), KmerType::U128(b)) => *a &= b,
+            _ => panic!("Bitwise AND is not supported for mismatched KmerType variants"),
+        }
+    }
+}
+
+impl BitXorAssign for KmerType {
+    fn bitxor_assign(&mut self, rhs: Self) {
+        match (self, rhs) {
+            (KmerType::U8(a), KmerType::U8(b)) => *a ^= b,
+            (KmerType::U16(a), KmerType::U16(b)) => *a ^= b,
+            (KmerType::U32(a), KmerType::U32(b)) => *a ^= b,
+            (KmerType::U64(a), KmerType::U64(b)) => *a ^= b,
+            (KmerType::U128(a), KmerType::U128(b)) => *a ^= b,
+            _ => panic!("Bitwise XOR is not supported for mismatched KmerType variants"),
+        }
+    }
+}
+
+impl Debug for KmerType {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        match self {
+            Self::U8(arg0) => f.debug_tuple("U8").field(arg0).finish(),
+            Self::U16(arg0) => f.debug_tuple("U16").field(arg0).finish(),
+            Self::U32(arg0) => f.debug_tuple("U32").field(arg0).finish(),
+            Self::U64(arg0) => f.debug_tuple("U64").field(arg0).finish(),
+            Self::U128(arg0) => f.debug_tuple("U128").field(arg0).finish(),
+        }
+    }
+}
+
+impl Binary for KmerType {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        match self {
+            Self::U8(val) => fmt::Binary::fmt(&val, f),
+            Self::U16(val) => fmt::Binary::fmt(&val, f),
+            Self::U32(val) => fmt::Binary::fmt(&val, f),
+            Self::U64(val) => fmt::Binary::fmt(&val, f),
+            Self::U128(val) => fmt::Binary::fmt(&val, f),
+        }
+    }
+}
+
+trait ToUInt {
+    // fn to_u8(&self) -> u8;
+    fn to_u16(&self) -> u16;
+    // fn to_u32(&self) -> u32;
+    // fn to_u64(&self) -> u64;
+    // fn to_u128(&self) -> u128;
+}
+
+impl ToUInt for KmerType {
+    // fn to_u8(&self) -> u8 {
+    //     match self {
+    //         Self::U8(val) => *val,
+    //         Self::U16(_) => panic!("U16 is not supported"),
+    //         Self::U32(_) => panic!("U32 is not supported"),
+    //         Self::U64(_) => panic!("U64 is not supported"),
+    //         Self::U128(_) => panic!("U128 is not supported"),
+    //     }
+    // }
+
+    fn to_u16(&self) -> u16 {
+        match self {
+            Self::U8(_) => panic!("U8 is not supported"),
+            Self::U16(val) => *val,
+            Self::U32(_) => panic!("U32 is not supported"),
+            Self::U64(_) => panic!("U64 is not supported"),
+            Self::U128(_) => panic!("U128 is not supported"),
+        }
+    }
+}
+
+fn init_kmer_type(len: usize, val: u8) -> KmerType {
+    if len <= 4 {
+        KmerType::U8(val)
+    } else if len <= 8 {
+        KmerType::U16(val.into())
+    } else if len <= 16 {
+        KmerType::U32(val.into())
+    } else if len <= 32 {
+        KmerType::U64(val.into())
+    } else if len <= 64 {
+        KmerType::U128(val.into())
+    } else {
+        panic!("kmer length not supported");
+    }
+}
+
+fn binary_encode(kmer: &str) -> KmerType {
+    let kmer_len: usize = kmer.len();
+
+    let mut result: KmerType = init_kmer_type(kmer_len, 0b00);
+
+    for (i, c) in kmer.chars().enumerate() {
+        let val: KmerType = match c {
+            'A' => init_kmer_type(kmer_len, 0b00),
+            'C' => init_kmer_type(kmer_len, 0b01),
+            'G' => init_kmer_type(kmer_len, 0b10),
+            'T' => init_kmer_type(kmer_len, 0b11),
+            _ => panic!("Invalid character in kmer"),
+        };
+        result |= val << (kmer_len - 1 - i) * 2;
+    }
+    result
+}
 
 fn main() {
     // Example set up params
@@ -152,7 +287,6 @@ fn main() {
         "GAGGATTTCT"
     ].to_vec();
     let k: usize = 5;
-    let seed: u32 = 123456789;
 
     //================================================================
     // Client Side
@@ -175,15 +309,15 @@ fn main() {
     let (client_key, server_key) = generate_keys(config);
 
     // User hashes the k-mers and encrypt
-    let query_kmer_hashes: Vec<u32> = query_kmers
+    let query_kmer_values: Vec<KmerType> = query_kmers
         .iter()
-        .map(|kmer| murmur32(kmer.as_bytes(), seed))
+        .map(|kmer| binary_encode(kmer))
         .collect();
-    println!("query_kmer_hashes: {:?}", query_kmer_hashes);
+    println!("query_kmer_values: {:?}", query_kmer_values);
     println!("==================================================");
 
     let mut before = Instant::now();
-    let enc_kmers: Vec<FheUint<FheUint32Id>> = encrypt_kmer_hashes(&query_kmer_hashes, &client_key);
+    let enc_kmers: Vec<FheUint<FheUint16Id>> = encrypt_kmer_hashes(&query_kmer_values, &client_key);
     println!("K-mers encryption time: {:.2?}", before.elapsed());
 
     //================================================================
@@ -199,11 +333,11 @@ fn main() {
     // Step 4: server compares query k-mers against all snp k-mers
     // in the surrounding positions homomorphically
     before = Instant::now();
-    let result_single = snp_compare_single(&enc_kmers, k, &snps, seed);
+    let result_single = snp_compare_single(&enc_kmers, k, &snps);
     println!("Server execution time single thread: {:.2?}", before.elapsed());
 
     before = Instant::now();
-    let results_parallel = snp_compare_parallel(&enc_kmers, k, &snps, seed);
+    let results_parallel = snp_compare_parallel(&enc_kmers, k, &snps);
     println!("Server execution time parallel threads: {:.2?}", before.elapsed());
     println!("==================================================");
 

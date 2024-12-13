@@ -8,7 +8,7 @@ It describes a privacy-preserving method for comparing patient genomic sequences
 
 This POC demonstrates a method where:
 1. The **patient splits their genomic sequence** into k-mers (subsequences of length `k`).
-2. The **k-mers are hashed and encrypted** on the client side using homomorphic encryption.
+2. The **k-mers are encoded and encrypted** on the client side using homomorphic encryption.
 3. The **encrypted k-mers are sent to a server**, which holds the SNP panel data.
 4. The **server performs homomorphic comparisons** to check for matches between the patient's k-mers and the SNP panel k-mers.
 5. The **encrypted results** of the comparison are returned to the patient, who then decrypts and analyzes them.
@@ -16,7 +16,7 @@ This POC demonstrates a method where:
 ## Key Components
 
 - **Homomorphic Encryption Library**: This implementation uses the [tfhe-rs](https://github.com/zama-ai/tfhe-rs) library for homomorphic encryption to securely process encrypted data.
-- **[MurmurHash](https://en.wikipedia.org/wiki/MurmurHash) Function**: Used to hash k-mers for uniform representation before encryption.
+- **Binary Encoding**: Used to encode k-mers for uniform representation before encryption.
 - **K-mer Generation**: A function to split a sequence into k-mers for comparison.
 - **Homomorphic Equality Test**: A method to perform equality testing between encrypted k-mers and SNP sequences.
 
@@ -25,8 +25,8 @@ This POC demonstrates a method where:
 ### Client-Side Workflow
 1. **Split the Query Sequence**:
    - The query sequence is split into k-mers using a sliding window approach.
-2. **Generate and Encrypt k-mer Hashes**:
-   - Each k-mer is hashed using a modified MurmurHash function and then encrypted using homomorphic encryption.
+2. **Generate and Encrypt k-mer Encodings**:
+   - Each k-mer is encoded into a binary representation and then encrypted using homomorphic encryption.
 3. **Send Encrypted Data**:
    - The encrypted k-mers and the encryption keys (server key) are sent to the server for comparison.
 
@@ -55,17 +55,17 @@ cargo run -r
 ==================================================
 query sequence: "ACGTTAACT"
 query k-mers: ["ACGTT", "CGTTA", "GTTAA", "TTAAC"]
-query_kmer_hashes: [2578886965, 1013214705, 3180670509, 1324437671]
+query_kmer_values: [U16(111), U16(444), U16(752), U16(961)]
 ==================================================
-K-mers encryption time: 1.33ms
-Server execution time single thread: 5.75s
-Server execution time parallel threads: 4.64s
+K-mers encryption time: 989.04µs
+Server execution time single thread: 3.16s
+Server execution time parallel threads: 2.08s
 ==================================================
 Decrypted result single thread: [true, false, true, true]
 Decrypted result parallel threads: [true, false, true, true]
-Result decryption time: 6.08µs
+Result decryption time: 5.46µs
 ==================================================
-Total execution time: 11.40s
+Total execution time: 6.23s
 ==================================================
 ```
 
@@ -78,3 +78,4 @@ This POC is inspired by the methods described in a research paper that aims to e
 - **Performance**: Homomorphic encryption introduces computational overhead. Optimizations can be made to improve processing time.
 - **Scalability**: This POC handles a limited number of SNPs and k-mers; further work is needed to scale up for real-world genome analysis.
 - **Security**: The cryptographic methods are for demonstration and should be thoroughly reviewed for production use.
+
