@@ -440,4 +440,164 @@ And:
           $= \lfloor -\frac{26}{16} + \frac{X}{16} + \frac{34X^2}{16} - \frac{47X^3}{16} \rceil$
 
           $= \color{green}{\boxed{-2 + 2X^2 - 3X^3}}$ $= \color{green}{\boxed{M + M' = M^{(+)}}}$
+  
+          Decryption worked fine because the **error coefficients** were all smaller (in absolute value) than $\Delta/2 = 8$.
+
+          The new error was equal to:
+
+          $E^{(+)} = E + E' = 1 + 1X^3 + 5 + X + 2X^2$
+
+          $= 6 + X+ 2X^2 + X^3 $
+  
   ---
+- Constant multiplication:
+
+  - Recall:
+
+    $\color{red}{M = -2 + 1X^{2} - 1X^{3}}$
+
+  - Choose $\Lambda$ as a small constant polynomial:
+  
+    $\color{red}{\Lambda = 2 + X^2 - 2X^3} \in R$
+
+  - The multiplication is equal to:
+
+    $\color{red}{M^{(\cdot)} \in R_p = \Lambda M}$
+    
+    $= (-2 + 1X^{2} - 1X^{3})(2 + X^2 - 2X^3)$
+
+    $= -4 + 2X^3 + X^4 - 3X^5 + 2X^6$
+
+    Replace $X^4$ with $-1$:
+
+    $= -4 + 2X^3 + (-1) - 3X(-1) + 2X^2(-1)$
+
+    $= -4 + 2X^3 - 1 + 3X - 2X^2$
+
+    $= -5 + 3X - 2X^2 +2X^3$
+
+  - Recall ciphertext $C$:
+
+    $\color{red}{C = (A_0, A_1, B)}$
+    
+    $= \color{green}{\boxed{(17 + 5X - 30X^{2} + 7X^{3}, 23 + 7X + 27X^{2} - 4X^{3}, 10 + 3X + 57X^{2} + 26 X^{3})}}$
+
+  ---
+
+  - $\Lambda$ multiplication on ciphertext:
+
+    $\color{red}{C^{(\cdot)} = (A_0^{(\cdot)}, A_1^{(\cdot)}, B^{(\cdot)})}$
+
+      - $\color{blue}{A_0^{(\cdot)} = \Lambda \cdot A_0}$ 
+      
+        $= (17 + 5X - 30X^{2} + 7X^{3})(2 + X^2 - 2X^3)$
+        
+        $= 34 + 17X^2 - 34X^3 + 10X + 5X^3 - 10X^4 - 60X^2 - 30X^4 + 60X^5 + 14X^3 + 7X^5 - 14X^6$
+
+        $= 34 + 10X - 43X^2 - 15X^3 - 40X^4 + 67X^5 - 14X^6$
+
+        Replace $X^4$ with $-1$:
+
+        $= 34 + 10X - 43X^2 - 15X^3 - 40(-1) + 67X(-1) - 14X^2(-1)$
+
+        $= 34 + 10X - 43X^2 - 15X^3 + 40 - 67X + 14X^2$
+
+        $= 74 - 57X - 29X^2 - 15X^3$
+      
+      - $\color{blue}{A_1^{(\cdot)} = \Lambda \cdot A_1}$
+
+        $= (23 + 7X + 27X^{2} - 4X^{3})(2 + X^2 - 2X^3)$
+
+        $= 46 + 23X^2 - 46X^3 + 14X + 7X^3 - 14X^4 + 54X^2 + 27X^4 - 54X^5 - 8X^3 - 4X^5 + 8X^6$
+
+        $= 46 + 14X + 77X^2 - 47X^3 + 13X^4 - 58X^5 + 8X^6$
+
+        Replace $X^4$ with $-1$:
+
+        $= 46 + 14X + 77X^2 - 47X^3 + 13(-1) - 58X(-1) + 8X^2(-1)$
+
+        $= 46 + 14X + 77X^2 - 47X^3 -13 + 58X - 8X^2$
+
+        $= 33 + 72X + 69X^2 - 47X^3$
+
+      - $\color{blue}{B^{(\cdot)} = \Lambda \cdot B}$
+
+        $= (10 + 3X + 57X^{2} + 26 X^{3})(2 + X^2 - 2X^3)$
+
+        $= 20 + 10X^2 - 20X^3 +6X + 3X^3 - 6X^4 + 114X^2 + 57X^4 - 114X^5 + 52X^3 + 26X^5 - 52X^6$
+
+        $= 20 + 6X + 124X^2 + 35X^3 + 51X^4 - 88X^5 - 52X^6$
+
+        Replace $X^4$ with $-1$:
+
+        $= 20 + 6X + 124X^2 + 35X^3 + 51(-1) - 88X(-1) - 52X^2(-1)$
+
+        $= 20 + 6X + 124X^2 + 35X^3 - 51 + 88X + 52X^2$
+
+        $= -31 + 94X + 176X^2 + 35X^3$
+
+    $\color{red}{C^{(\cdot)} = (A_0^{(\cdot)}, A_1^{(\cdot)}, B^{(\cdot)})}$
+    
+    $= \color{green}{\boxed{(74 - 57X - 29X^2 - 15X^3, 33 + 72X + 69X^2 - 47X^3, -31 + 94X + 176X^2 + 35X^3)}}$
+
+  ---
+
+  - Decrypt the constant multiplication result:
+
+    $\color{red}{M^{(\cdot)} = \lfloor (M^{(\cdot)} + E^{(\cdot)}) / \Delta \rceil}$
+
+    $\color{red}{M^{(\cdot)} + E^{(\cdot)} = B^{(\cdot)} - \sum_{i=0}^{k-1}A_i^{(\cdot)}S_i} \in R_p $
+
+    $\color{red}{= B^{(\cdot)} - (A_0^{(\cdot)}S_0 + A_1^{(\cdot)}S_1)}$
+
+      - $\color{blue}{A_0^{(\cdot)}S_0}$
+        $= (74 - 57X - 29X^2 - 15X^3)(X^2 + X^3)$
+
+        $= 74X^2 + 74X^3 - 57X^3 - 57X^4 - 29X^4 - 29X^5 - 15X^5 - 15X^6$
+
+        $= 74X^2 + 17X^3 - 86X^4 - 44X^5 - 15X^6$
+
+        Replace $X^4$ with $-1$:
+
+        $= 74X^2 + 17X^3 - 86(-1) - 44X(-1) - 15X^2(-1)$
+
+        $= 74X^2 + 17X^3 + 86 + 44X + 15X^2$
+
+        $= 86 + 44X + 89X^2 + 17X^3$
+
+      - $\color{blue}{A_1^{(\cdot)}S_1}$
+        $= (33 + 72X + 69X^2 - 47X^3)(1 + X^3)$
+
+        $= 33 + 33X^3 + 72X + 72X^4 + 69X^2 + 69X^5 - 47X^3 - 47X^6$
+
+        $= 33 + 72X + 69X^2 - 14X^3 + 72X^4 + 69X^5 - 47X^6$
+
+        Replace $X^4$ with $-1$:
+
+        $= 33 + 72X + 69X^2 - 14X^3 + 72(-1) + 69X(-1) - 47X^2(-1)$
+
+        $= 33 + 72X + 69X^2 - 14X^3 - 72 - 69X + 47X^2$
+
+        $= -39 + 3X + 116X^2 - 14X^3$
+
+      - $\color{blue}{\Delta M^{(\cdot)} + E^{(\cdot)}}$
+        $= \color{blue}{B^{(\cdot)} - (A_0^{(\cdot)}S_0 + A_1^{(\cdot)}S_1)}$
+
+        $= -31 + 94X + 176X^2 + 35X^3 - (86 + 44X + 89X^2 + 17X^3 + (-39 + 3X + 116X^2 - 14X^3))$
+
+        $= -31 + 94X + 176X^2 + 35X^3 - (86 + 44X + 89X^2 + 17X^3 - 39 + 3X + 116X^2 - 14X^3)$
+
+        $= -31 + 94X + 176X^2 + 35X^3 - (47 + 47X + 205X^2 + 3X^3)$
+
+        $= -31 + 94X + 176X^2 + 35X^3 - 47 - 47X - 205X^2 - 3X^3$
+
+        $= -78 + 47X - 29X^2 + 32X^3$
+
+    $\color{red}{M^{(\cdot)} = \lfloor (M^{(\cdot)} + E^{(\cdot)}) / \Delta \rceil}$
+
+      $= \lfloor \frac{-78 + 47X - 29X^2 + 32X^3}{16} \rceil$
+
+      $= \lfloor \frac{-78}{16} + \frac{47X}{16} - \frac{29X^2}{16} + \frac{32X^3}{16} \rceil$
+
+      $= \color{green}{\boxed{-5 + 3X - 2X^2 + 2X^3}}$
+      $= \color{green}{\boxed{M^{(\cdot)} = \Lambda M}}$
