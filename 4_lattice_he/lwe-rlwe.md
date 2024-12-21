@@ -601,3 +601,19 @@ And:
 
       $= \color{green}{\boxed{-5 + 3X - 2X^2 + 2X^3}}$
       $= \color{green}{\boxed{M^{(\cdot)} = \Lambda M}}$
+    
+    The new error was equal to:
+
+      $E^{(\cdot)} = \Lambda E$
+      
+      $= (2 + X^2 - 2X^3)(1 + 1X^3)$
+
+      $= 2 + 2X^3 + X^2 + X^5 - 2X^3 - 2X^6$
+
+      $= 2 + X^2 + X^5 - 2X^6$
+
+      Replace $X^4$ with $-1$:
+
+      $= 2 + X^2 + X(-1) - 2X^2(-1)$
+
+      $= 2 + X^2 - X + 2X^2$
