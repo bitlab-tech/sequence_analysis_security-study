@@ -70,7 +70,7 @@ Given:
 
 - $R_q = (\mathbb{Z}/q\mathbb{Z})[X]/(X^N + 1)$, the same ring over the modular integers
 
-- Modular reductions are centered around zero. As an example, when reducing modulo $64$, we use the [congruence](https://en.wikipedia.org/wiki/Congruence_relation) classes $\lbrace-32, -31,..., 0,..., 30, 31\rbrace$
+- Modular reductions are centered around zero. As an example, when reducing modulo $64$, we use the [congruence](https://en.wikipedia.org/wiki/Congruence_relation) classes $\lbrace -32, -31,..., 0,..., 30, 31 \rbrace$
 
 - $\chi_\sigma$: a [Gaussian probability distribution](https://en.wikipedia.org/wiki/Normal_distribution) with mean $\mu = 0$ and standard deviation $\sigma$
 
@@ -269,7 +269,7 @@ And:
 
     $= 10 + 3X + 57X^{2} + 26 X^{3}$
 
-    Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+    Reduce coefficients modulo $64$ with congruence classes $\lbrace -32, -31, ..., 0, ..., 31 \rbrace$:
 
     $= \color{green}{10 + 3X - 7X^{2} + 26 X^{3}}$
 
@@ -288,7 +288,7 @@ And:
 
       $= (10 + 3X - 7X^{2} + 26 X^{3}) - (41 + 3X + 41X^{2} + 41X^{3})$
 
-      Reduce right-hand polynomial's coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+      Reduce right-hand polynomial's coefficients modulo $64$ with congruence classes $\lbrace -32, -31, ..., 0, ..., 31 \rbrace$:
 
       $= (10 + 3X - 7X^{2} + 26 X^{3}) - (-23 + 3X - 23X^{2} - 23X^{3})$
 
@@ -296,7 +296,7 @@ And:
 
       $= 33 + 16X^{2} + 49X^{3}$
 
-      Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+      Reduce coefficients modulo $64$ with congruence classes $\lbrace -32, -31, ..., 0, ..., 31 \rbrace$:
 
       $= \color{green}{-31 + 16X^{2} - 15X^{3}}$
 
@@ -316,7 +316,7 @@ And:
 
     $= -2 + 2X^2 -3X^3$
 
-    Reduce coefficients modulo $p$ $(4)$ with congruence classes $\{-2, -1, 0, 1\}$:
+    Reduce coefficients modulo $p$ $(4)$ with congruence classes $\lbrace -2, -1, 0, 1\rbrace$:
 
     $= \color{green}{\boxed{-2 - 2X^2 + X^3}}$
 
@@ -375,7 +375,7 @@ And:
 
       $= -18 - 16X + 44X^2 - 12X^3$
 
-      Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+      Reduce coefficients modulo $64$ with congruence classes $\lbrace -32, -31, ..., 0, ..., 31 \rbrace$:
 
       $= \color{green}{-18 - 16X - 20X^2 - 12X^3}$
 
@@ -397,7 +397,7 @@ And:
 
         $= 17 + 3X + 40X^2 - 7X^3$
 
-        Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+        Reduce coefficients modulo $64$ with congruence classes $\lbrace -32, -31, ..., 0, ..., 31 \rbrace$:
 
         $= 17 + 3X - 24X^2 -7X^3$
 
@@ -405,7 +405,7 @@ And:
 
         $= -8 - 13X + 101X^2 + 14X^3$
 
-        Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+        Reduce coefficients modulo $64$ with congruence classes $\lbrace -32, -31, ..., 0, ..., 31 \rbrace$:
 
         $= -8 - 13X - 27X^2 + 14X^3$
 
@@ -437,7 +437,7 @@ And:
 
           $= 4 + 23X + 20X^2 + 51X^3$
 
-          Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+          Reduce coefficients modulo $64$ with congruence classes $\lbrace -32, -31, ..., 0, ..., 31 \rbrace$:
 
           $= 4 + 23X + 20X^2 - 13X^3$
 
@@ -463,7 +463,7 @@ And:
 
           $= -26 - 63X - 30X^2 + 17X^3$
 
-          Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+          Reduce coefficients modulo $64$ with congruence classes $\lbrace -32, -31, ..., 0, ..., 31 \rbrace$:
 
           $= -26 + X -30X^2 + 17X^3$
 
@@ -510,7 +510,7 @@ And:
 
     $= -5 + 3X - 2X^2 + 2X^3$
 
-    Reduce coefficients modulo $p$ $(4)$ with congruence classes $\{-2, -1, 0, 1\}$:
+    Reduce coefficients modulo $p$ $(4)$ with congruence classes $\lbrace -2, -1, 0, 1\rbrace$:
 
     $= \color{green}{\boxed{-1 - X - 2X^2 - 2X^3}}$
 
@@ -542,7 +542,7 @@ And:
 
         $= 74 - 57X - 29X^2 - 15X^3$
 
-        Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+        Reduce coefficients modulo $64$ with congruence classes $\lbrace -32, -31, ..., 0, ..., 31 \rbrace$:
 
         $= 10 + 7X - 29X^2 - 15X^3$
 
@@ -562,7 +562,7 @@ And:
 
         $= 33 + 72X + 69X^2 - 47X^3$
 
-        Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+        Reduce coefficients modulo $64$ with congruence classes $\lbrace -32, -31, ..., 0, ..., 31 \rbrace$:
 
         $= -31 + 8X + 5X^2 + 17X^3$
 
@@ -582,7 +582,7 @@ And:
 
         $= 33 - 34X + 48X^2 + 35X^3$
 
-        Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+        Reduce coefficients modulo $64$ with congruence classes $\lbrace -32, -31, ..., 0, ..., 31 \rbrace$:
 
         $= -31 + 30X -16X^2 - 29X^3$
 
@@ -615,7 +615,7 @@ And:
 
         $= 22 + 44X + 25X^2 + 17X^3$
 
-        Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+        Reduce coefficients modulo $64$ with congruence classes $\lbrace -32, -31, ..., 0, ..., 31 \rbrace$:
 
         $= 22 - 20X + 25X^2 + 17X^3$
 
@@ -634,7 +634,7 @@ And:
 
         $= -39 + 3X - 12X^2 - 14X^3$
 
-        Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+        Reduce coefficients modulo $64$ with congruence classes $\lbrace -32, -31, ..., 0, ..., 31 \rbrace$:
 
         $= 25 + 3X - 12X^2 - 14X^3$
 
@@ -647,7 +647,7 @@ And:
 
         $= -14 + 47X - 29X^2 - 32X^3$
 
-        Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+        Reduce coefficients modulo $64$ with congruence classes $\lbrace -32, -31, ..., 0, ..., 31 \rbrace$:
 
         $= -14 - 17X - 29X^2 -32X^3$
 
