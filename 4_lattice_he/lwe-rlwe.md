@@ -267,11 +267,15 @@ And:
 
     $= (25 + 23X + 10X^{2} + 22X^{3}) + (16 - 20X + 31X^{2} + 19X^{3}) + (-32 + 16X^{2} - 16X^{3}) + (1 + X^{3})$
 
-    $= \color{green}{10 + 3X + 57X^{2} + 26 X^{3}}$
+    $= 10 + 3X + 57X^{2} + 26 X^{3}$
+
+    Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+
+    $= \color{green}{10 + 3X - 7X^{2} + 26 X^{3}}$
 
   - **Cipher text** $\color{red}{(A_{0}, A_{1}, B)}$ is:
 
-    $\color{green}{\boxed{(17 + 5X - 30X^{2} + 7X^{3}, 23 + 7X + 27X^{2} - 4X^{3}, 10 + 3X + 57X^{2} + 26 X^{3})}}$
+    $\color{green}{\boxed{(17 + 5X - 30X^{2} + 7X^{3}, 23 + 7X + 27X^{2} - 4X^{3}, 10 + 3X - 7X^{2} + 26 X^{3})}}$
 
   ---
 
@@ -280,11 +284,19 @@ And:
 
     - $\color{blue}{\Delta M + E = B - \sum_{i = 0}^{k - 1} A_{i}S{i}}$
 
-      $=(10 + 3X + 57X^{2} + 26X^{3}) - ((25 + 23X + 10X^{2} + 22X^{3}) + (16 - 20X + 31X^{2} + 19X^{3}))$
+      $=(10 + 3X - 7X^{2} + 26 X^{3}) - ((25 + 23X + 10X^{2} + 22X^{3}) + (16 - 20X + 31X^{2} + 19X^{3}))$
 
-      $= (10 + 3X + 57X^{2} + 26X^{3}) - (41 + 3X + 41X^{2} + 41X^{3})$
+      $= (10 + 3X - 7X^{2} + 26 X^{3}) - (41 + 3X + 41X^{2} + 41X^{3})$
 
-      $= 10 + 3X + 57X^{2} + 26X^{3} - 41 - 3X - 41X^{2} - 41X^{3}$
+      Reduce right-hand polynomial's coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+
+      $= (10 + 3X - 7X^{2} + 26 X^{3}) - (-23 + 3X - 23X^{2} - 23X^{3})$
+
+      $= 10 + 3X - 7X^{2} + 26 X^{3} + 23 - 3X + 23X^2 + 23X^3$
+
+      $= 33 + 16X^{2} + 49X^{3}$
+
+      Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
 
       $= \color{green}{-31 + 16X^{2} - 15X^{3}}$
 
@@ -297,12 +309,16 @@ And:
   ---
 
 - Ciphertext Addition:
-  - Recall that $\color{red}{M' = X^2 - 2X^3 \in R_q}$
-  - $\color{red}{M^{(+)} = M + M'}$
+  - Recall that $\color{red}{M' = X^2 - 2X^3 \in R_p}$
+  - $\color{red}{M^{(+)} = M + M'} \in R_p$
 
     $= -2 + X^2 - X^3 + X^2 - 2X^3$
 
-    $= \color{green}{-2 + 2X^2 -3X^3}$
+    $= -2 + 2X^2 -3X^3$
+
+    Reduce coefficients modulo $p$ $(4)$ with congruence classes $\{-2, -1, 0, 1\}$:
+
+    $= \color{green}{\boxed{-2 - 2X^2 + X^3}}$
 
   - Let's choose:
 
@@ -359,9 +375,13 @@ And:
 
       $= -18 - 16X + 44X^2 - 12X^3$
 
+      Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+
+      $= \color{green}{-18 - 16X - 20X^2 - 12X^3}$
+
     - **Ciphertext** $\color{red}{(A_0', A_1', B')}$ is:
 
-      $\color{green}{\boxed{(9 + 20X + X^2 - X^3, -6 -4X + 13X^2 - 3X^3, -18 - 16X + 44X^2 - 12X^3)}}$
+      $\color{green}{\boxed{(9 + 20X + X^2 - X^3, -6 -4X + 13X^2 - 3X^3, -18 - 16X - 20X^2 - 12X^3)}}$
 
   ---
 
@@ -377,13 +397,21 @@ And:
 
         $= 17 + 3X + 40X^2 - 7X^3$
 
+        Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+
+        $= 17 + 3X - 24X^2 -7X^3$
+
       - $\color{blue}{B + B'}$ $= 10 + 3X + 57X^{2} + 26 X^{3} + (-18 - 16X + 44X^2 - 12X^3)$
 
         $= -8 - 13X + 101X^2 + 14X^3$
 
+        Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+
+        $= -8 - 13X - 27X^2 + 14X^3$
+
     $\color{red}{C^{(+)} = (A_0^{(+)}, A_1^{(+)}, B^{(+)})}$
 
-    $=\color{green}{\boxed{(26 + 25X -29X^2 + 6X^3, 17 + 3X + 40X^2 - 7X^3, -8 - 13X + 101X^2 + 14X^3)}}$
+    $=\color{green}{\boxed{(26 + 25X -29X^2 + 6X^3, 17 + 3X - 24X^2 -7X^3, -8 - 13X - 27X^2 + 14X^3)}}$
 
   ---
 
@@ -409,43 +437,49 @@ And:
 
           $= 4 + 23X + 20X^2 + 51X^3$
 
-        - $\color{blue}{A_1^{(+)}S_1}$ $= (17 + 3X + 40X^2 - 7X^3)(1 + X^3)$
+          Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
 
-          $=17 + 17X^3 + 3X + 3X^4 + 40X^2 + 40X^5 -7X^3 - 7X^6$
+          $= 4 + 23X + 20X^2 - 13X^3$
 
-          $= 17 + 3X + 40X^2 + 10X^3 + 3X^4 + 40X^5 - 7X^6$
+        - $\color{blue}{A_1^{(+)}S_1}$ $= (17 + 3X - 24X^2 -7X^3)(1 + X^3)$
+
+          $= 17 + 17X^3 + 3X + 3X^4 -24X^2 - 24X^5 - 7X^3 - 7X^6$
+
+          $= 17 + 3X - 24X^2 + 10X^3 + 3X^4 - 24X^5 -7X^6$
 
           Replace $X^4$ with $-1$:
 
-          $= 17 + 3X + 40X^2 + 10X^3 + 3(-1) + 40X(-1) - 7X^2(-1)$
+          $= 17 + 3X - 24X^2 + 10X^3 + 3(-1) - 24X(-1) -7X^2(-1)$
 
-          $= 17 + 3X + 40X^2 + 10X^3 - 3 - 40X + 7X^2$
+          $= 17 + 3X - 24X^2 + 10X^3 - 3 + 24X + 7X^2$
 
-          $= 14 - 37X + 47X^2 + 10X^3$
+          $= 14 + 27X - 17X^2 + 10X^3$
 
         - $\color{blue}{\Delta M^{(+)} + E^{(+)} = B^{(+)} - (A_0^{(+)}S_0 + A_1^{(+)}S_1)}$
 
-          $= -8 - 13X + 101X^2 + 14X^3 - (4 + 23X + 20X^2 + 51X^3 + 14 - 37X + 47X^2 + 10X^3)$
+          $= -8 - 13X - 27X^2 + 14X^3 - (4 + 23X + 20X^2 - 13X^3 + 14 + 27X - 17X^2 + 10X^3)$
 
-          $= -8 - 13X + 101X^2 + 14X^3 - 4 - 23X - 20X^2 - 51X^3 - 14 + 37X - 47X^2 - 10X^3$
+          $= -8 - 13X - 27X^2 + 14X^3 - 4 - 23X - 20X^2 + 13X^3 - 14 - 27X + 17X^2 - 10X^3$
 
-          $= (-8 - 4 - 14) + (-13 - 23 + 37)X + (101 - 20 - 47)X^2 + (14 - 51 - 10)X^3$
+          $= -26 - 63X - 30X^2 + 17X^3$
 
-          $= -26 + X + 34X^2 - 47X^3$
+          Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+
+          $= -26 + X -30X^2 + 17X^3$
 
       - $\color{red}{M^{(+)} = \lfloor (\Delta M^{(+)} + E^{(+)})/\Delta \rceil}$
 
-          $= \lfloor \frac{-26 + X + 34X^2 - 47X^3}{16} \rceil$
+          $= \lfloor \frac{-26 + X - 30X^2 + 17X^3}{16} \rceil$
 
-          $= \lfloor -\frac{26}{16} + \frac{X}{16} + \frac{34X^2}{16} - \frac{47X^3}{16} \rceil$
+          $= \lfloor -\frac{26}{16} + \frac{X}{16} - \frac{30X^2}{16} + \frac{17X^3}{16} \rceil$
 
-          $= \color{green}{\boxed{-2 + 2X^2 - 3X^3}}$ $= \color{green}{\boxed{M + M' = M^{(+)}}}$
+          $= \color{green}{\boxed{-2 - 2X^2 + X^3}}$ $= \color{green}{\boxed{M + M' = M^{(+)}}}$
   
           Decryption worked fine because the **error coefficients** were all smaller (in absolute value) than $\Delta/2 = 8$.
 
           The new error was equal to:
 
-          $E^{(+)} = E + E' = 1 + 1X^3 + 5 + X + 2X^2$
+          $E^{(+)} \in R_q = E + E' = 1 + 1X^3 + 5 + X + 2X^2$
 
           $= 6 + X+ 2X^2 + X^3 $
   
@@ -454,7 +488,7 @@ And:
 
   - Recall:
 
-    $\color{red}{M = -2 + 1X^{2} - 1X^{3}}$
+    $\color{red}{M = -2 + 1X^{2} - 1X^{3} \in R_p }$
 
   - Choose $\Lambda$ as a small constant polynomial:
   
@@ -474,13 +508,17 @@ And:
 
     $= -4 + 2X^3 - 1 + 3X - 2X^2$
 
-    $= -5 + 3X - 2X^2 +2X^3$
+    $= -5 + 3X - 2X^2 + 2X^3$
+
+    Reduce coefficients modulo $p$ $(4)$ with congruence classes $\{-2, -1, 0, 1\}$:
+
+    $= \color{green}{\boxed{-1 - X - 2X^2 - 2X^3}}$
 
   - Recall ciphertext $C$:
 
     $\color{red}{C = (A_0, A_1, B)}$
     
-    $= \color{green}{\boxed{(17 + 5X - 30X^{2} + 7X^{3}, 23 + 7X + 27X^{2} - 4X^{3}, 10 + 3X + 57X^{2} + 26 X^{3})}}$
+    $= \color{green}{\boxed{(17 + 5X - 30X^{2} + 7X^{3}, 23 + 7X + 27X^{2} - 4X^{3}, 10 + 3X - 7X^{2} + 26 X^{3})}}$
 
   ---
 
@@ -503,7 +541,11 @@ And:
         $= 34 + 10X - 43X^2 - 15X^3 + 40 - 67X + 14X^2$
 
         $= 74 - 57X - 29X^2 - 15X^3$
-      
+
+        Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+
+        $= 10 + 7X - 29X^2 - 15X^3$
+
       - $\color{blue}{A_1^{(\cdot)} = \Lambda \cdot A_1}$
 
         $= (23 + 7X + 27X^{2} - 4X^{3})(2 + X^2 - 2X^3)$
@@ -520,25 +562,33 @@ And:
 
         $= 33 + 72X + 69X^2 - 47X^3$
 
+        Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+
+        $= -31 + 8X + 5X^2 + 17X^3$
+
       - $\color{blue}{B^{(\cdot)} = \Lambda \cdot B}$
 
-        $= (10 + 3X + 57X^{2} + 26 X^{3})(2 + X^2 - 2X^3)$
+        $= (10 + 3X - 7X^{2} + 26 X^{3})(2 + X^2 - 2X^3)$
 
-        $= 20 + 10X^2 - 20X^3 +6X + 3X^3 - 6X^4 + 114X^2 + 57X^4 - 114X^5 + 52X^3 + 26X^5 - 52X^6$
+        $= 20 + 10X^2 - 20X^3 + 6X + 3X^3 - 6X^4 - 14X^2 - 7X^4 + 14X^5 + 52X^3 + 26X^5 - 52X^6$
 
-        $= 20 + 6X + 124X^2 + 35X^3 + 51X^4 - 88X^5 - 52X^6$
+        $= 20 + 6X - 4X^2 + 35X^3 - 13X^4 + 40X^5 - 52X^6$
 
         Replace $X^4$ with $-1$:
 
-        $= 20 + 6X + 124X^2 + 35X^3 + 51(-1) - 88X(-1) - 52X^2(-1)$
+        $= 20 + 6X - 4X^2 + 35X^3 - 13(-1) + 40X(-1) - 52X^2(-1)$
 
-        $= 20 + 6X + 124X^2 + 35X^3 - 51 + 88X + 52X^2$
+        $= 20 + 6X - 4X^2 + 35X^3 + 13 - 40X + 52X^2$
 
-        $= -31 + 94X + 176X^2 + 35X^3$
+        $= 33 - 34X + 48X^2 + 35X^3$
+
+        Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+
+        $= -31 + 30X -16X^2 - 29X^3$
 
     $\color{red}{C^{(\cdot)} = (A_0^{(\cdot)}, A_1^{(\cdot)}, B^{(\cdot)})}$
     
-    $= \color{green}{\boxed{(74 - 57X - 29X^2 - 15X^3, 33 + 72X + 69X^2 - 47X^3, -31 + 94X + 176X^2 + 35X^3)}}$
+    $= \color{green}{\boxed{(10 + 7X - 29X^2 - 15X^3, -31 + 8X + 5X^2 + 17X^3, -31 + 30X -16X^2 - 29X^3)}}$
 
   ---
 
@@ -551,55 +601,63 @@ And:
     $\color{red}{= B^{(\cdot)} - (A_0^{(\cdot)}S_0 + A_1^{(\cdot)}S_1)}$
 
       - $\color{blue}{A_0^{(\cdot)}S_0}$
-        $= (74 - 57X - 29X^2 - 15X^3)(X^2 + X^3)$
+        $= (10 + 7X - 29X^2 - 15X^3)(X^2 + X^3)$
 
-        $= 74X^2 + 74X^3 - 57X^3 - 57X^4 - 29X^4 - 29X^5 - 15X^5 - 15X^6$
+        $= 10X^2 + 10X^3 + 7X^3 + 7X^4 - 29X^4 - 29X^5 -15X^5 - 15X^6$
 
-        $= 74X^2 + 17X^3 - 86X^4 - 44X^5 - 15X^6$
+        $= 10X^2 + 17X^3 - 22X^4 - 44X^5 - 15X^6$
 
         Replace $X^4$ with $-1$:
 
-        $= 74X^2 + 17X^3 - 86(-1) - 44X(-1) - 15X^2(-1)$
+        $= 10X^2 + 17X^3 - 22(-1) - 44X(-1) - 15X^2(-1)$
 
-        $= 74X^2 + 17X^3 + 86 + 44X + 15X^2$
+        $= 10X^2 + 17X^3 + 22 + 44X + 15X^2$
 
-        $= 86 + 44X + 89X^2 + 17X^3$
+        $= 22 + 44X + 25X^2 + 17X^3$
+
+        Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+
+        $= 22 - 20X + 25X^2 + 17X^3$
 
       - $\color{blue}{A_1^{(\cdot)}S_1}$
-        $= (33 + 72X + 69X^2 - 47X^3)(1 + X^3)$
+        $= (-31 + 8X + 5X^2 + 17X^3)(1 + X^3)$
 
-        $= 33 + 33X^3 + 72X + 72X^4 + 69X^2 + 69X^5 - 47X^3 - 47X^6$
+        $= -31 - 31X^3 + 8X + 8X^4 + 5X^2 + 5X^5 + 17X^3 + 17X^6$
 
-        $= 33 + 72X + 69X^2 - 14X^3 + 72X^4 + 69X^5 - 47X^6$
+        $= -31 + 8X + 5X^2 - 14X^3 + 8X^4 + 5X^5 + 17X^6$
 
         Replace $X^4$ with $-1$:
 
-        $= 33 + 72X + 69X^2 - 14X^3 + 72(-1) + 69X(-1) - 47X^2(-1)$
+        $= -31 + 8X + 5X^2 - 14X^3 + 8(-1) + 5X(-1) + 17X^2(-1)$
 
-        $= 33 + 72X + 69X^2 - 14X^3 - 72 - 69X + 47X^2$
+        $= -31 + 8X + 5X^2 - 14X^3 - 8 - 5X - 17X^2$
 
-        $= -39 + 3X + 116X^2 - 14X^3$
+        $= -39 + 3X - 12X^2 - 14X^3$
+
+        Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
+
+        $= 25 + 3X - 12X^2 - 14X^3$
 
       - $\color{blue}{\Delta M^{(\cdot)} + E^{(\cdot)}}$
         $= \color{blue}{B^{(\cdot)} - (A_0^{(\cdot)}S_0 + A_1^{(\cdot)}S_1)}$
 
-        $= -31 + 94X + 176X^2 + 35X^3 - (86 + 44X + 89X^2 + 17X^3 + (-39 + 3X + 116X^2 - 14X^3))$
+        $= -31 + 30X -16X^2 - 29X^3 - (22 - 20X + 25X^2 + 17X^3 + (-39 + 3X - 12X^2 - 14X^3))$
 
-        $= -31 + 94X + 176X^2 + 35X^3 - (86 + 44X + 89X^2 + 17X^3 - 39 + 3X + 116X^2 - 14X^3)$
+        $= -31 + 30X -16X^2 - 29X^3 - 22 + 20X - 25X^2 - 17X^3 + 39 - 3X + 12X^2 + 14X^3$
 
-        $= -31 + 94X + 176X^2 + 35X^3 - (47 + 47X + 205X^2 + 3X^3)$
+        $= -14 + 47X - 29X^2 - 32X^3$
 
-        $= -31 + 94X + 176X^2 + 35X^3 - 47 - 47X - 205X^2 - 3X^3$
+        Reduce coefficients modulo $64$ with congruence classes $\{-32, -31, ..., 0, ..., 31 \}$:
 
-        $= -78 + 47X - 29X^2 + 32X^3$
+        $= -14 - 17X - 29X^2 -32X^3$
 
     $\color{red}{M^{(\cdot)} = \lfloor (M^{(\cdot)} + E^{(\cdot)}) / \Delta \rceil}$
 
-      $= \lfloor \frac{-78 + 47X - 29X^2 + 32X^3}{16} \rceil$
+      $= \lfloor \frac{-14 - 17X - 29X^2 - 32X^3}{16} \rceil$
 
-      $= \lfloor \frac{-78}{16} + \frac{47X}{16} - \frac{29X^2}{16} + \frac{32X^3}{16} \rceil$
+      $= \lfloor -\frac{14}{16} - \frac{17X}{16} - \frac{29X^2}{16} - \frac{32X^3}{16} \rceil$
 
-      $= \color{green}{\boxed{-5 + 3X - 2X^2 + 2X^3}}$
+      $= \color{green}{\boxed{-1 - X - 2X^2 - 2X^3}}$
       $= \color{green}{\boxed{M^{(\cdot)} = \Lambda M}}$
     
     The new error was equal to:
