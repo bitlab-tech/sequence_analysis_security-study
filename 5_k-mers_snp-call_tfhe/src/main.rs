@@ -19,29 +19,34 @@ use tfhe::{
 use rayon::prelude::*;
 use std::time::Instant;
 
-fn equality_test(query_kmer: &FheUint<FheUint16Id>, subject_kmer: &str) -> FheBool {
-    let subject_kmer_hash: KmerType = binary_encode(subject_kmer);
-    query_kmer.eq(subject_kmer_hash.to_u16())
+fn equality_test(query_kmer: &FheUint<FheUint16Id>, subject_kmer: u16) -> FheBool {
+    query_kmer.eq(subject_kmer)
 }
 
 fn snp_compare_single<'a>(
     query_kmers: &'a Vec<FheUint<FheUint16Id>>,
     k: usize,
-    subjects: &'a Vec<&str>
+    subjects: &'a Vec<&str>,
+    min: u16,
+    max: u16
 ) -> Vec<FheBool> {
     let results = query_kmers.iter().map(|query_kmer| {
         subjects
-            .iter()
-            .map(|subject| {
-                k_mer_lazy(&subject, k)
-                    .map(|subject_kmer| {
-                        equality_test(query_kmer, subject_kmer)
-                    })
-                    .reduce(|a, b| a | b)
-                    .unwrap()
-            })
-            .reduce(|a, b| a | b)
-            .unwrap()
+        .iter()
+        .map(|subject| {
+            k_mer_lazy(&subject, k)
+                .map(|subject_kmer| {
+                    binary_encode(subject_kmer).to_u16()
+                })
+                .filter(|&kmer| kmer >= min && kmer <= max)
+                .map(|bin_kmer| {
+                    equality_test(query_kmer, bin_kmer)
+                })
+                .reduce(|a, b| a | b)
+                .unwrap()
+        })
+        .reduce(|a, b | a | b)
+        .unwrap()
     }).collect();
 
     results
@@ -50,7 +55,9 @@ fn snp_compare_single<'a>(
 fn snp_compare_parallel<'a>(
     query_kmers: &'a Vec<FheUint<FheUint16Id>>,
     k: usize,
-    subjects: &'a Vec<&str>
+    subjects: &'a Vec<&str>,
+    min: u16,
+    max: u16
 ) -> Vec<FheBool> {
     let results = query_kmers.par_iter().map(| query_kmer | {
         subjects
@@ -58,7 +65,11 @@ fn snp_compare_parallel<'a>(
             .map(|subject| {
                 k_mer_lazy(&subject, k)
                     .map(|subject_kmer| {
-                        equality_test(query_kmer, subject_kmer)
+                        binary_encode(subject_kmer).to_u16()
+                    })
+                    .filter(|&kmer| kmer >= min && kmer <= max)
+                    .map(|bin_kmer| {
+                        equality_test(query_kmer, bin_kmer)
                     })
                     .reduce(|a, b| a | b)
                     .unwrap()
@@ -117,10 +128,23 @@ fn main() {
         .build();
     let (client_key, server_key) = generate_keys(config);
 
-    // User hashes the k-mers and encrypt
+    // User binary encodes the k-mers and encrypt
+    let mut min: u16 = 0b1111111111111111;
+    let mut max: u16 = 0b0;
+
     let query_kmer_values: Vec<KmerType> = query_kmers
         .iter()
-        .map(|kmer| binary_encode(kmer))
+        .map(|kmer| {
+            let bin_kmer = binary_encode(kmer);
+            let kmer_value = bin_kmer.to_u16();
+            if kmer_value >= max {
+                max = kmer_value;
+            }
+            if kmer_value <= min {
+                min = kmer_value;
+            }
+            bin_kmer
+        })
         .collect();
     println!("query_kmer_values: {:?}", query_kmer_values);
     println!("==================================================");
@@ -142,11 +166,23 @@ fn main() {
     // Step 4: server compares query k-mers against all snp k-mers
     // in the surrounding positions homomorphically
     before = Instant::now();
-    let result_single = snp_compare_single(&enc_kmers, k, &snps);
+    let result_single = snp_compare_single(
+        &enc_kmers,
+        k,
+        &snps,
+        min,
+        max
+    );
     println!("Server execution time single thread: {:.2?}", before.elapsed());
 
     before = Instant::now();
-    let results_parallel = snp_compare_parallel(&enc_kmers, k, &snps);
+    let results_parallel = snp_compare_parallel(
+        &enc_kmers,
+        k,
+        &snps,
+        min,
+        max
+    );
     println!("Server execution time parallel threads: {:.2?}", before.elapsed());
     println!("==================================================");
 

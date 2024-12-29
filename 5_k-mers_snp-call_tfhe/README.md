@@ -57,15 +57,15 @@ query sequence: "ACGTTAACT"
 query k-mers: ["ACGTT", "CGTTA", "GTTAA", "TTAAC"]
 query_kmer_values: [U16(111), U16(444), U16(752), U16(961)]
 ==================================================
-K-mers encryption time: 989.04µs
-Server execution time single thread: 3.16s
-Server execution time parallel threads: 2.08s
+K-mers encryption time: 715.46µs
+Server execution time single thread: 2.57s
+Server execution time parallel threads: 1.71s
 ==================================================
 Decrypted result single thread: [true, false, true, true]
 Decrypted result parallel threads: [true, false, true, true]
-Result decryption time: 5.46µs
+Result decryption time: 5.21µs
 ==================================================
-Total execution time: 6.23s
+Total execution time: 5.35s
 ==================================================
 ```
 
