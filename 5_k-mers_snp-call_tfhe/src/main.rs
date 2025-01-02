@@ -1,7 +1,6 @@
 mod kmer_type;
 use kmer_type::{
     KmerType,
-    ToUInt,
     binary_encode
 };
 use tfhe::prelude::*;
@@ -35,7 +34,7 @@ fn snp_compare_single<'a>(
         .iter()
         .map(|subject| {
             k_mer_lazy(&subject, k)
-                .map(|subject_kmer| binary_encode(subject_kmer).to_u16())
+                .map(|subject_kmer| binary_encode(subject_kmer).to_value())
                 .filter(|&kmer| kmer >= min && kmer <= max)
                 .map(|bin_kmer| equality_test(query_kmer, bin_kmer))
                 .reduce(|a, b| a | b)
@@ -60,7 +59,7 @@ fn snp_compare_parallel<'a>(
             .iter()
             .map(|subject| {
                 k_mer_lazy(&subject, k)
-                    .map(|subject_kmer| binary_encode(subject_kmer).to_u16())
+                    .map(|subject_kmer| binary_encode(subject_kmer).to_value())
                     .filter(|&kmer| kmer >= min && kmer <= max)
                     .map(|bin_kmer| equality_test(query_kmer, bin_kmer))
                     .reduce(|a, b| a | b)
@@ -84,7 +83,7 @@ fn k_mer_lazy<'a>(seq: &'a str, k: usize) -> impl Iterator<Item = &'a str> {
 fn encrypt_kmers(kmers: &Vec<KmerType>, client_key: &ClientKey) -> Vec<FheUint<FheUint16Id>> {
     kmers
         .par_iter()
-        .map(|kmer_hash| FheUint16::encrypt(kmer_hash.to_u16(), client_key))
+        .map(|kmer_hash| FheUint16::encrypt(kmer_hash.to_value::<u16>(), client_key))
         .collect()
 }
 
@@ -128,7 +127,7 @@ fn main() {
         .iter()
         .map(|kmer| {
             let bin_kmer = binary_encode(kmer);
-            let kmer_value = bin_kmer.to_u16();
+            let kmer_value = bin_kmer.to_value();
             if kmer_value >= max {
                 max = kmer_value;
             }

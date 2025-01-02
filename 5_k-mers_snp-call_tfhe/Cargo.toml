@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 rayon = "1.10.0"
 tfhe = { version = "*", features = ["boolean", "shortint", "integer", "aarch64-unix"] }
+num-traits = "0.2"

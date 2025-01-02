@@ -1,5 +1,6 @@
 use std::fmt::{self, Binary, Debug, Error, Formatter};
 use std::ops::{BitAnd, BitAndAssign, BitOr, BitOrAssign, BitXorAssign, Shl, Shr};
+use num_traits::cast::NumCast;
 
 #[derive(PartialEq, Eq)]
 pub enum KmerType {
@@ -131,32 +132,14 @@ impl Binary for KmerType {
     }
 }
 
-pub trait ToUInt {
-    // fn to_u8(&self) -> u8;
-    fn to_u16(&self) -> u16;
-    // fn to_u32(&self) -> u32;
-    // fn to_u64(&self) -> u64;
-    // fn to_u128(&self) -> u128;
-}
-
-impl ToUInt for KmerType {
-    // fn to_u8(&self) -> u8 {
-    //     match self {
-    //         Self::U8(val) => *val,
-    //         Self::U16(_) => panic!("U16 is not supported"),
-    //         Self::U32(_) => panic!("U32 is not supported"),
-    //         Self::U64(_) => panic!("U64 is not supported"),
-    //         Self::U128(_) => panic!("U128 is not supported"),
-    //     }
-    // }
-
-    fn to_u16(&self) -> u16 {
+impl KmerType {
+    pub fn to_value<T: NumCast>(&self) -> T {
         match self {
-            Self::U8(_) => panic!("U8 is not supported"),
-            Self::U16(val) => *val,
-            Self::U32(_) => panic!("U32 is not supported"),
-            Self::U64(_) => panic!("U64 is not supported"),
-            Self::U128(_) => panic!("U128 is not supported"),
+            KmerType::U8(val) => T::from(*val).expect("Conversion failed"),
+            KmerType::U16(val) => T::from(*val).expect("Conversion failed"),
+            KmerType::U32(val) => T::from(*val).expect("Conversion failed"),
+            KmerType::U64(val) => T::from(*val).expect("Conversion failed"),
+            KmerType::U128(val) => T::from(*val).expect("Conversion failed"),
         }
     }
 }
