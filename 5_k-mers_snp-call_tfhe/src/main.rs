@@ -35,13 +35,9 @@ fn snp_compare_single<'a>(
         .iter()
         .map(|subject| {
             k_mer_lazy(&subject, k)
-                .map(|subject_kmer| {
-                    binary_encode(subject_kmer).to_u16()
-                })
+                .map(|subject_kmer| binary_encode(subject_kmer).to_u16())
                 .filter(|&kmer| kmer >= min && kmer <= max)
-                .map(|bin_kmer| {
-                    equality_test(query_kmer, bin_kmer)
-                })
+                .map(|bin_kmer| equality_test(query_kmer, bin_kmer))
                 .reduce(|a, b| a | b)
                 .unwrap()
         })
@@ -64,13 +60,9 @@ fn snp_compare_parallel<'a>(
             .iter()
             .map(|subject| {
                 k_mer_lazy(&subject, k)
-                    .map(|subject_kmer| {
-                        binary_encode(subject_kmer).to_u16()
-                    })
+                    .map(|subject_kmer| binary_encode(subject_kmer).to_u16())
                     .filter(|&kmer| kmer >= min && kmer <= max)
-                    .map(|bin_kmer| {
-                        equality_test(query_kmer, bin_kmer)
-                    })
+                    .map(|bin_kmer| equality_test(query_kmer, bin_kmer))
                     .reduce(|a, b| a | b)
                     .unwrap()
             })
