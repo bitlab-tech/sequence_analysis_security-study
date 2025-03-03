@@ -1,1 +1,0 @@
-# Searchable Symmetric Encrypted SNP Comparison Proof of Concept
