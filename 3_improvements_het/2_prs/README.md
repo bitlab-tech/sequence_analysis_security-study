@@ -44,7 +44,7 @@ This program provides a simplified PRS calculation, ideal for educational purpos
 1. Clone or download this repository:
 ```bash
 git clone https://github.com/bitlab-tech/sequence_analysis_security-study.git
-cd cd 3_improvements_het/2_prs/
+cd 3_improvements_het/2_prs/
 ```
 
 2. Build the project:
