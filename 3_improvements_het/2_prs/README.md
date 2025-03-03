@@ -11,7 +11,7 @@ PRS is calculated as a weighted sum of an individual's genetic variants:
 - **Weights $(w_i)$**: Reflect the effect size of each variant on the trait, typically derived from genome-wide association studies (GWAS).
 - **Formula**:  
 
-  $PRS = \sum^{i=M}_{i=0}g_i . w_i$
+  $PRS = \displaystyle\sum_{i=0}^{i=M}{g_i . w_i}$
 
   where $g_i$ is the genotype value and $w_i$ is the corresponding weight for each variant $i$.
 
@@ -30,11 +30,7 @@ This program provides a simplified PRS calculation, ideal for educational purpos
 ## Features
 - Command-line interface using `clap` for argument parsing.
 - Reads genotype and phenotype data from CSV files.
-- Computes PRS as 
-
-  $\sum^{i=M}_{i=0} g_i . w_i$
-
-  for each genotype record.
+- Computes PRS as $\displaystyle\sum_{i=0}^{i=M}{g_i . w_i}$ for each genotype record.
 - Outputs PRS results to a file, one score per line.
 
 ## Prerequisites
