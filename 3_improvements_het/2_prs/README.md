@@ -1,9 +1,9 @@
 # Polygenic Risk Score (PRS) Calculator
 
-This Rust program calculates **Polygenic Risk Scores (PRS)**, a powerful tool in genetic research and personalized medicine. PRS quantifies an individual's genetic predisposition to a specific trait or disease by aggregating the effects of multiple genetic variants. This implementation reads genotype and phenotype data from CSV files, computes PRS for each individual, and outputs the results to a file.
+This Rust program calculates **[Polygenic Risk Scores (PRS)](https://en.wikipedia.org/wiki/Polygenic_score)**, a powerful tool in genetic research and personalized medicine. PRS quantifies an individual's genetic predisposition to a specific trait or disease by aggregating the effects of multiple genetic variants. This implementation reads genotype and phenotype data from CSV files, computes PRS for each individual, and outputs the results to a file.
 
 ## What is a Polygenic Risk Score (PRS)?
-A **Polygenic Risk Score (PRS)** is a numerical estimate of an individual's genetic risk for a particular trait or disease, based on the combined impact of many genetic variants (typically single nucleotide polymorphisms, or SNPs). Unlike single-gene disorders, most complex traits (e.g., diabetes, heart disease, height) are influenced by hundreds or thousands of genetic loci, each contributing a small effect. PRS sums these effects into a single score, providing a personalized risk assessment.
+A **[Polygenic Risk Score (PRS)](https://en.wikipedia.org/wiki/Locus_(genetics))** is a numerical estimate of an individual's genetic risk for a particular trait or disease, based on the combined impact of many genetic variants (typically [single nucleotide polymorphisms, or SNPs](https://en.wikipedia.org/wiki/Single-nucleotide_polymorphism)). Unlike single-gene disorders, most complex traits (e.g., diabetes, heart disease, height) are influenced by hundreds or thousands of [genetic loci](https://en.wikipedia.org/wiki/Locus_(genetics)), each contributing a small effect. PRS sums these effects into a single score, providing a personalized risk assessment.
 
 ### How PRS is Calculated
 PRS is calculated as a weighted sum of an individual's genetic variants:
