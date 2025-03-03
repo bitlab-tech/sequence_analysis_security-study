@@ -13,7 +13,10 @@ PRS is calculated as a weighted sum of an individual's genetic variants:
 
   $PRS = \displaystyle\sum_{i=0}^{i=M}{g_i . w_i}$
 
-  where $g_i$ is the genotype value and $w_i$ is the corresponding weight for each variant $i$.
+  where:
+  - $g_i$ is the genotype value.
+  - $w_i$ is the corresponding weight for each variant $i$.
+  - $M$ is the number of variants.
 
 In this program:
 - Genotype data provides $g_i$ values (numeric, e.g., 0.5, 1.2) for each SNP.
