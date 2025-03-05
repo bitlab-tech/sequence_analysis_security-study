@@ -1,6 +1,6 @@
 # Calculate polygenic Risk Score homomorphically with CKKS 
 
-This Go program implements a [**Polygenic Risk Score (PRS)**](https://en.wikipedia.org/wiki/Polygenic_score) calculator using the [**CKKS homomorphic encryption scheme**](https://eprint.iacr.org/2016/421.pdf) from the [Lattigo library](https://github.com/tuneinsight/lattigo). By leveraging CKKS, the program performs secure and privacy-preserving computations on encrypted genomic data, ensuring that sensitive information remains protected throughout the process. Notably, the implementation has a **fast runtime**, making it efficient even when handling large datasets.
+This Go program implements a [**Polygenic Risk Score (PRS)**](https://en.wikipedia.org/wiki/Polygenic_score) calculator using the [**CKKS homomorphic encryption scheme**](https://eprint.iacr.org/2016/421.pdf) from the [Lattigo library](https://github.com/tuneinsight/lattigo). This is based on [Homomorphic Encryption: An Application to Polygenic Risk Scores - Knight et al. (2024)](https://www.researchgate.net/publication/380961036_Homomorphic_Encryption_An_Application_to_Polygenic_Risk_Scores). By leveraging CKKS, the program performs secure and privacy-preserving computations on encrypted genomic data, ensuring that sensitive information remains protected throughout the process. Notably, the implementation has a **fast runtime**, making it efficient even when handling large datasets.
 
 ## Why Use CKKS for PRS?
 
