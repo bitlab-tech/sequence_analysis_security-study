@@ -54,7 +54,7 @@ $$
         - For each row $h$ (where $h = 1, ..., K$):
         - Take the encrypted genotype vector $X_{e,j}[h]$ and model vector $\beta_e[h]$.
         - Perform element-wise multiplication using `MulRelinNew()`:
-            - $v_h = X_{e,i}[h] * \beta_e[h]$.
+            - $v_h = X_{e,j}[h] * \beta_e[h]$.
         - `MulRelinNew()` multiplies the ciphertexts and applies relinearization to manage ciphertext growth (a technical requirement in HE to keep ciphertexts manageable).
         - $v_h$ is a new encrypted vector representing the weighted contributions ($X_{ij} \cdot \beta_i$) for that segment of SNPs.
 
