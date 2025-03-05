@@ -10,31 +10,64 @@ This Go program implements a [**Polygenic Risk Score (PRS)**](https://en.wikiped
 
 - **Flexibility**: CKKS supports real-number computations, aligning perfectly with the continuous nature of PRS inputs and outputs.
 
-## Features
+## Formula
 
-- **Secure PRS Calculation**: Computes PRS using CKKS homomorphic encryption, enabling computations on encrypted data without decryption.
+$$
+PRS_j = \sum_{i=0}^{i=M} X_{i,j} \beta_{i}
+$$
 
-- **Fast Runtime**: Designed for efficiency, with quick execution times even for large genomic datasets (e.g., 10k SNPs and 50 individuals).
+- $\beta_{i}$ : effect size for variant i
+- $X_{i,j}$ : the effect allele count for sample $j$ at variant $i$
+- $M$ : the number of variants
 
-- **Scalable Security Levels**: Supports multiple security parameters (e.g., $2^{13}$, $2^{14}$, $2^{15}$, $2^{16}$) via CKKS parameter literals. Increasing the value of this parameter enhances security but reduces performance.
 
 ## How It Works
+1. **Encoding the Data**
 
-1. **Data Encryption:**
-    - Genotype and phenotype data are encoded and encrypted using CKKS parameters.
-    - Keys (public, secret, relinearization, and rotation) are generated for secure computation.
+    - **Input Data**:
+        - $X_{j}$ : A vector of genotypes (0, 1 or 2) for individual $j$ across $M$ SNPs.        
+        - $\beta$ : A vector of model coefficients (effect sizes) for the same SNPs.
 
-2. **Homomorphic PRS Calculation:**
-    - The program computes the inner product of encrypted genotype and coefficient matrices using CKKS homomorphic operations.
-    - Results remain encrypted during computation, preserving privacy.
+    - **Encoding Process**:
+        - Both $X_{j}$ and $\beta$ are encoded into CKKS plaintexts, transforming them from simple vectors into polynomials in the ring $Z_{Q}[x]/(x^{N} + 1)$.
+        - $N$ is typically a power of 2 (e.g. 8192, 16384), determining the maximum vector lenfth that can be encoded (up to $N/2$ real numbers dua to complex packing in CKKS).
+        - The genotype values (integers: 0, 1, 2) and $\beta$ values (typically floats) are scaled and embedded into polynomial coefficients in $Z_{Q}$
+        - Operations (multiplication, addition) are performed modulo $Z^{N} + 1$, ensuring the polynomial structure is preserved.
 
-3. **Decryption:**
-    - The encrypted PRS results are decrypted and transposed to match the expected output format (individuals × phenotypes).
+    - **Purpose**:
+        - Encoding allows these vectors to be encrypted and processed homomorphically while packing multiple values into a single polynomial for efficiency (via SIMD-like parallelism).
 
-4. **Performance:**
-    - The runtime completes encryption, computation, and decryption in a matter of seconds for typical datasets (e.g., 10k SNPs, 50 individuals).
-    - Memory usage is monitored and printed at the end of execution.
+2. **Encryption:**
+    - The encoded plaintexts $X_{j}$ and $\beta$ are encrypted into ciphertexts:
+        - $X_{e,j}$ : Encrypted genotype matrix for individual $j$.
+        - $\beta_{e}$ : Encrypted model coefficient matrix.
 
+    - **Dimensions**:
+        - Both matrices are described as $K$ x $N/2$:
+            - $N/2$ represents the number of slots (values) packed into each polynomial, leveraging CKKS's packing capability.
+            - $K$ is the number of polynomials needed to encode the full vector if the SNP count $M > N/2$. For example, if $M=10,000$ and $N=8192$, $K=\lceil{10,000/4096}\rceil=3$.
+        - This structure aligns with the encryption parameters (e.g., modulus $Q$, polynomial degree $N$).
+
+3. **Computing the Inner Product**:
+
+    1. **Element-Wise Multiplication**:
+        - For each row $h$ (where $h = 1, ..., K$):
+        - Take the encrypted genotype vector $X_{e,j}[h]$ and model vector $\beta_e[h]$.
+        - Perform element-wise multiplication using `MulRelinNew()`:
+            - $v_h = X_{e,i}[h] * \beta_e[h]$.
+        - `MulRelinNew()` multiplies the ciphertexts and applies relinearization to manage ciphertext growth (a technical requirement in HE to keep ciphertexts manageable).
+        - $v_h$ is a new encrypted vector representing the weighted contributions ($X_{ij} \cdot \beta_i$) for that segment of SNPs.
+
+    2. **Accumulation**:
+        - The resulting vectors $v_h$ are aggregated across all $K$ rows:
+        - Initial result $r = v_1$.
+        - For $h = 2, ..., K$, add $v_h$ to $r$ using homomorphic addition: $r = r + v_h$.
+        - This combines the partial products into a single encrypted result vector.
+    3. **Summation with `InnerSumLog()`**:
+        - The `InnerSumLog()` function sums the coefficients within the polynomial $r$:
+        - In CKKS, a polynomial encodes up to $N/2$ values across its coefficients.
+        - `InnerSumLog()` efficiently computes the sum of these values (e.g., $\sum X_{ij} \cdot \beta_i$) by rotating and adding the polynomial terms, leveraging the ring structure.
+        - The output is a single encrypted PRS value for individual $j$.
 
 ## Prerequisites
 
