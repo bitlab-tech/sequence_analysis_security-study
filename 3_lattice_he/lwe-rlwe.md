@@ -111,7 +111,7 @@ And:
 
 1. Compute:
 
-    $B = \sum_{i = 0}^{k - 1} A_i \cdot S_i + \Delta M + E$
+    $B = \displaystyle\sum_{i = 0}^{k - 1} A_i \cdot S_i + \Delta M + E$
 
 2. Define:
 
@@ -127,7 +127,7 @@ And:
 
 1. Compute the linear combination:
 
-    $B - \sum_{i = 0}^{k - 1} A_{i}S_{i}$
+    $B - \displaystyle\sum_{i = 0}^{k - 1} A_{i} \cdot S_{i}$
 
     This simplifies to:
   
@@ -163,10 +163,29 @@ And:
 
 ---
 
+### Plaintext Addition
+
+1. Define:
+
+    $C' = (0, ..., 0, \Delta M') \subseteq R_q^{k+1}$, a trivial encryption pf $M'$.
+
+2. Perform addition:
+
+    $C^{(+)} = C + C'$
+
+    $C^{(+)} = (A_0 + 0, \dots, A_{k-1} + 0, B + \Delta M')$
+
+    Equivalently:
+
+    $C^{(+)} = \text{GLWE}_{\mathbf{S}, \sigma}(\Delta(M + M')) \subseteq R_q^{k+1}$
+
+3. The error in $C^{(+)}$ is $E$, with the same standard deviation $\sigma$.
+---
+
 ### Constant Multiplication
 
 1. Let $\Lambda$ be a small constant polynomial or a scalar in $\mathbb{Z}$:
-   - $\Lambda = \sum_{i=0}^{N-1} \Lambda_i X^i \in R$
+   - $\Lambda = \displaystyle\sum_{i=0}^{N-1} \Lambda_i \cdot X^i \in R$
 
      or:
    - $\Lambda \in \mathbb{Z}$
