@@ -18,6 +18,7 @@ Explore these concepts to understand the interplay between mathematical structur
   * [Encryption](#encryption)
   * [Decryption](#decryption)
   * [Ciphertext Addition](#ciphertext-addition)
+  * [Plaintext Addition](#plaintext-addition)
   * [Constant Multiplication](#constant-multiplication)
 - [References](#references)
 - [Example](#example)
