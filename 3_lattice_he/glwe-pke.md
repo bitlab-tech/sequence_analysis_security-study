@@ -19,15 +19,15 @@ In practice, a public key would be a list of encryptions of zero (i.e., $M = 0$)
 
 ### Encryption
 
-1. Define:
+1. Define a trivial cipher text we want to add:
 
-    $C' = (0, ..., 0, \Delta M) \in R_q^{k+1}$
+    $C_M = (0, ..., 0, \Delta M) \in R_q^{k+1}$
 
 2. Choose a small random mask vector $R = (r_0, \dots, r_{k-1})$ with small coefficients in $R_q$.
 
 3. Compute the ciphertext as:
 
-    $C =  \displaystyle\sum_{i=0}^{k-1} r_i \cdot PubKey + C'$
+    $C =  \displaystyle\sum_{i=0}^{k-1} r_i \cdot PubKey + C_M$
 
     Expanding this,
 
@@ -47,15 +47,15 @@ In practice, a public key would be a list of encryptions of zero (i.e., $M = 0$)
 
 1. Compute:
 
-    $B' - \displaystyle\sum_{i=0}^{k-1} A'_{i}S_{i}$
+    $B_M - \displaystyle\sum_{i=0}^{k-1} A_{Mi}S_{i}$
 
-    where $(A'_{i}, B')$ are the components of $C$.
+    where $(A_{Mi}, B_M)$ are the components of $C$.
 
     Plugging in the values:
 
-    $\left( \displaystyle\sum_{i=0}^{k-1} r_i A_i  S_i \right) + \displaystyle\sum_{i=0}^{k-1} r_iE + \Delta M - \displaystyle\sum_{i=0}^{k-1} A'_iS$
+    $\left( \displaystyle\sum_{i=0}^{k-1} r_i A_i  S_i \right) + \displaystyle\sum_{i=0}^{k-1} r_iE + \Delta M - \displaystyle\sum_{i=0}^{k-1} A_{Mi}S_i$
 
-    Since $A'_{i} = \sum_{i=0}^{k-1} r_iA_i$, this simplifies to:
+    Since $A_{Mi} = \sum_{i=0}^{k-1} r_iA_i$, this simplifies to:
 
     $\displaystyle\sum_{i=0}^{k-1} r_i A_i S_i - \displaystyle\sum_{i=0}^{k-1} r_i A_i S_i + \displaystyle\sum_{i=0}^{k-1} r_i E + \Delta M$
 
@@ -82,9 +82,9 @@ $C = \sum_{i=0}^{k-1} r_i (A_i, B_i) + (0, ..., 0, \Delta M)$
 
 ### Example 2: Decrypting the Ciphertext
 
-Given the ciphertext $C = (A'_0, ..., A'_{k-1}, B')$, the decryptor computes:
+Given the ciphertext $C = (A_{M0}, ..., A_{Mk-1}, B_M)$, the decryptor computes:
 
-$B' - \sum_{i=0}^{k-1} A'_i S_i$
+$B_M - \sum_{i=0}^{k-1} A_{Mi} S_i$
 
 Which simplifies to:
 
