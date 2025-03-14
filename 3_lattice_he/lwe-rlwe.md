@@ -168,7 +168,7 @@ And:
 
 1. Define:
 
-    $C' = (0, ..., 0, \Delta M') \subseteq R_q^{k+1}$, a trivial encryption of $M'$.
+    $C' = (0, ..., 0, \Delta M') \in R_q^{k+1}$, a trivial encryption of $M'$.
 
 2. Perform addition:
 

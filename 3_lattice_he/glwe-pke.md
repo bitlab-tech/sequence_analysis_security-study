@@ -21,7 +21,7 @@ In practice, a public key would be a list of encryptions of zero (i.e., $M = 0$)
 
 1. Define:
 
-    $C' = (0, ..., 0, \Delta M) \subseteq R_q^{k+1}$
+    $C' = (0, ..., 0, \Delta M) \in R_q^{k+1}$
 
 2. Choose a small random mask vector $R = (r_0, \dots, r_{k-1})$ with small coefficients in $R_q$.
 
