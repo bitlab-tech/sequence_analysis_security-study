@@ -31,7 +31,7 @@ In practice, a public key would be a list of encryptions of zero (i.e., $M = 0$)
 
     Expanding this,
 
-    $C = \displaystyle\sum_{i=0}^{k-1} r_i \cdot (A_i, B_i) + (0, \dots, 0, \Delta M)$
+    $C = \displaystyle\sum_{i=0}^{k-1} r_i \cdot (A_i, B) + (0, \dots, 0, \Delta M)$
 
     Which simplifies to:
 
@@ -41,7 +41,7 @@ In practice, a public key would be a list of encryptions of zero (i.e., $M = 0$)
 
     $C = \left( \displaystyle\sum_{i=0}^{k-1} r_i A_i, \displaystyle\sum_{i=0}^{k-1} r_i(A_iS_i + E) + \Delta M \right)$
 
-    $C = \left( \displaystyle\sum_{i=0}^{k-1} r_i A_i, \left( \displaystyle\sum_{i=0}^{k-1} r_i A_i S_i \right) + \displaystyle\sum_{i=0}^{k-1} r_i E + \Delta M \right)$
+    $C = \left( \displaystyle\sum_{i=0}^{k-1} r_i A_i, \displaystyle\sum_{i=0}^{k-1} r_i A_i S_i + \displaystyle\sum_{i=0}^{k-1} r_i E + \Delta M \right)$
 
 ### Decryption
 
@@ -53,9 +53,9 @@ In practice, a public key would be a list of encryptions of zero (i.e., $M = 0$)
 
     Plugging in the values:
 
-    $\left( \displaystyle\sum_{i=0}^{k-1} r_i A_i  S_i \right) + \displaystyle\sum_{i=0}^{k-1} r_iE + \Delta M - \displaystyle\sum_{i=0}^{k-1} A_{Mi}S_i$
+    $\displaystyle\sum_{i=0}^{k-1} r_i A_i  S_i + \displaystyle\sum_{i=0}^{k-1} r_iE + \Delta M - \displaystyle\sum_{i=0}^{k-1} A_{Mi}S_i$
 
-    Since $A_{Mi} = \sum_{i=0}^{k-1} r_iA_i$, this simplifies to:
+    Since $A_{Mi} = r_iA_i$, this simplifies to:
 
     $\displaystyle\sum_{i=0}^{k-1} r_i A_i S_i - \displaystyle\sum_{i=0}^{k-1} r_i A_i S_i + \displaystyle\sum_{i=0}^{k-1} r_i E + \Delta M$
 
