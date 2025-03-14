@@ -35,35 +35,37 @@ In practice, a public key would be a list of encryptions of zero (i.e., $M = 0$)
 
     Which simplifies to:
 
-    $C = \left( \displaystyle\sum_{i=0}^{k-1} r_i A_i, \displaystyle\sum_{i=0}^{k-1} r_iB_i + \Delta M \right)$
+    $C = \left( \displaystyle\sum_{i=0}^{k-1} r_i A_i, \displaystyle\sum_{i=0}^{k-1} r_iB + \Delta M \right)$
 
-    Since $B_i = A_iS + E_i$, we get:
+    Since $B = \sum_{i=0}^{k-1}A_iS_i + E$, we get:
 
-    $C = \left( \displaystyle\sum_{i=0}^{k-1} r_i A_i, \displaystyle\sum_{i=0}^{k-1} r_i(A_iS + E_i) + \Delta M \right)$
+    $C = \left( \displaystyle\sum_{i=0}^{k-1} r_i A_i, \displaystyle\sum_{i=0}^{k-1} r_i(A_iS_i + E) + \Delta M \right)$
 
-    $C = \left( \displaystyle\sum_{i=0}^{k-1} r_i A_i, \left( \displaystyle\sum_{i=0}^{k-1} r_i A_i \right)S + \displaystyle\sum_{i=0}^{k-1} r_i E_i + \Delta M \right)$
+    $C = \left( \displaystyle\sum_{i=0}^{k-1} r_i A_i, \left( \displaystyle\sum_{i=0}^{k-1} r_i A_i S_i \right) + \displaystyle\sum_{i=0}^{k-1} r_i E + \Delta M \right)$
 
 ### Decryption
 
 1. Compute:
 
-    $B' - \displaystyle\sum_{i=0}^{k-1} A'_{i}S$
+    $B' - \displaystyle\sum_{i=0}^{k-1} A'_{i}S_{i}$
 
-    where $(A'_{i}, B')$ are the components of $C$. Plugging in the values:
+    where $(A'_{i}, B')$ are the components of $C$.
 
-    $\left( \displaystyle\sum_{i=0}^{k-1} r_iA_i \right) S + \displaystyle\sum_{i=0}^{k-1} r_iE_i + \Delta M - \displaystyle\sum_{i=0}^{k-1} A'_iS$
+    Plugging in the values:
+
+    $\left( \displaystyle\sum_{i=0}^{k-1} r_i A_i  S_i \right) + \displaystyle\sum_{i=0}^{k-1} r_iE + \Delta M - \displaystyle\sum_{i=0}^{k-1} A'_iS$
 
     Since $A'_{i} = \sum_{i=0}^{k-1} r_iA_i$, this simplifies to:
 
-    $\displaystyle\sum_{i=0}^{k-1} r_i A_i S - \displaystyle\sum_{i=0}^{k-1} r_i A_i S + \displaystyle\sum_{i=0}^{k-1} r_i E_i + \Delta M$
+    $\displaystyle\sum_{i=0}^{k-1} r_i A_i S_i - \displaystyle\sum_{i=0}^{k-1} r_i A_i S_i + \displaystyle\sum_{i=0}^{k-1} r_i E + \Delta M$
 
-    $= \displaystyle\sum_{i=0}^{k-1} r_i E_i + \Delta M$
+    $= \displaystyle\sum_{i=0}^{k-1} r_i E + \Delta M$
 
-    Since $\sum_{i=0}^{k-1} r_i E_i$ is still a **small error term**, decryption proceeds by rounding:
+    Since $\sum_{i=0}^{k-1} r_i E$ is still a **small error term**, decryption proceeds by rounding:
 
-    $M = \lfloor (\Delta M + \displaystyle\sum_{i=0}^{k-1} r_i E_i ) / \Delta \rceil$
+    $M = \left\lfloor (\Delta M + \displaystyle\sum_{i=0}^{k-1} r_i E ) / \Delta \right\rceil$
 
-    As long as $\sum_{i=0}^{k-1} r_i E_i$ is small enough, rounding correctly recovers $M$.
+    As long as $\sum_{i=0}^{k-1} r_i E$ is small enough, rounding correctly recovers $M$.
 
 ## Examples
 
@@ -82,7 +84,7 @@ $C = \sum_{i=0}^{k-1} r_i (A_i, B_i) + (0, ..., 0, \Delta M)$
 
 Given the ciphertext $C = (A'_0, ..., A'_{k-1}, B')$, the decryptor computes:
 
-$B' - \sum_{i=0}^{k-1} A'_i S$
+$B' - \sum_{i=0}^{k-1} A'_i S_i$
 
 Which simplifies to:
 
