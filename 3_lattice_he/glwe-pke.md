@@ -23,25 +23,35 @@ In practice, a public key would be a list of encryptions of zero (i.e., $M = 0$)
 
     $C_M = (0, ..., 0, \Delta M) \in R_q^{k+1}$
 
-2. Choose a small random mask vector $R = (r_0, \dots, r_{k-1})$ with small coefficients in $R_q$.
+2. Choose a small random mask $\rho$ as a polynomial or scalar:
+
+    - $\rho = \displaystyle\sum_{i=0}^{N-1} \rho_i \cdot X^i \in R$
+
+        or:
+
+    - $\rho \in \mathbb{Z}$
 
 3. Compute the ciphertext as:
 
-    $C =  \displaystyle\sum_{i=0}^{k-1} r_i \cdot PubKey + C_M$
+    $C = \rho \cdot PubKey + C_M$
 
     Expanding this,
 
-    $C = \displaystyle\sum_{i=0}^{k-1} r_i \cdot (A_i, B) + (0, \dots, 0, \Delta M)$
+    $C = (\rho A_0, \dots, \rho A_{k-1}, \rho B) + (0, \dots, 0, \Delta M)$
 
     Which simplifies to:
 
-    $C = \left( \displaystyle\sum_{i=0}^{k-1} r_i A_i, \displaystyle\sum_{i=0}^{k-1} r_iB + \Delta M \right)$
+    $C = \left(\rho A_0, \dots, \rho A_{k-1}, \rho B + \Delta M \right)$
 
     Since $B = \sum_{i=0}^{k-1}A_iS_i + E$, we get:
 
-    $C = \left( \displaystyle\sum_{i=0}^{k-1} r_i A_i, \displaystyle\sum_{i=0}^{k-1} r_i(A_iS_i + E) + \Delta M \right)$
+    $C = \left(\rho A_0, \dots, \rho A_{k-1}, \rho \cdot \left( \displaystyle\sum_{i=0}^{k-1} A_iS_i + E \right) + \Delta M \right)$
 
-    $C = \left( \displaystyle\sum_{i=0}^{k-1} r_i A_i, \displaystyle\sum_{i=0}^{k-1} r_i A_i S_i + \displaystyle\sum_{i=0}^{k-1} r_i E + \Delta M \right)$
+    $C = \left(\rho A_0, \dots, \rho A_{k-1}, \displaystyle\sum_{i=0}^{k-1} \rho A_i S_i +  \rho E + \Delta M \right)$
+
+    The format holds as:
+
+    $C = \left(A_{M0}, \dots, A_{Mk-1}, B_M \right)$
 
 ### Decryption
 
@@ -53,19 +63,19 @@ In practice, a public key would be a list of encryptions of zero (i.e., $M = 0$)
 
     Plugging in the values:
 
-    $\displaystyle\sum_{i=0}^{k-1} r_i A_i  S_i + \displaystyle\sum_{i=0}^{k-1} r_iE + \Delta M - \displaystyle\sum_{i=0}^{k-1} A_{Mi}S_i$
+    $\displaystyle\sum_{i=0}^{k-1} \rho A_i  S_i + \rho E + \Delta M - \displaystyle\sum_{i=0}^{k-1} A_{Mi}S_i$
 
-    Since $A_{Mi} = r_iA_i$, this simplifies to:
+    Since $A_{Mi} = \rho A_i$, this simplifies to:
 
-    $\displaystyle\sum_{i=0}^{k-1} r_i A_i S_i - \displaystyle\sum_{i=0}^{k-1} r_i A_i S_i + \displaystyle\sum_{i=0}^{k-1} r_i E + \Delta M$
+    $\displaystyle\sum_{i=0}^{k-1} \rho A_i S_i - \displaystyle\sum_{i=0}^{k-1} \rho A_i S_i + \rho E + \Delta M$
 
-    $= \displaystyle\sum_{i=0}^{k-1} r_i E + \Delta M$
+    $= \rho E + \Delta M$
 
-    Since $\sum_{i=0}^{k-1} r_i E$ is still a **small error term**, decryption proceeds by rounding:
+    Since $\rho E$ is still a **small error term**, decryption proceeds by rounding:
 
-    $M = \left\lfloor (\Delta M + \displaystyle\sum_{i=0}^{k-1} r_i E ) / \Delta \right\rceil$
+    $M = \left\lfloor \dfrac{\Delta M + \rho E}{\Delta}\right\rceil $
 
-    As long as $\sum_{i=0}^{k-1} r_i E$ is small enough, rounding correctly recovers $M$.
+    As long as $\rho E$ is small enough, rounding correctly recovers $M$.
 
 ## Examples
 
@@ -74,11 +84,11 @@ Assume we have:
 - Secret key $S = (s_0, s_1, ..., s_{k-1})$
 - Public key $PubKey = (A_0, ..., A_{k-1}, B)$ where $B = \sum_{i=0}^{k-1} A_i S_i + E$
 - Message $M = 1$ (represented in the encrypted domain as $\Delta M$)
-- Random mask vector $R = (r_0, r_1, ..., r_{k-1})$
+- Random mask $\rho = \displaystyle\sum_{i=0}^{N-1} \rho_i \cdot X^i \in R$
 
 Then the ciphertext is computed as:
 
-$C = \sum_{i=0}^{k-1} r_i (A_i, B_i) + (0, ..., 0, \Delta M)$
+$C = \rho (A_0, \dots, A_{k-1}, B) + (0, ..., 0, \Delta M)$
 
 ### Example 2: Decrypting the Ciphertext
 
@@ -88,11 +98,11 @@ $B_M - \sum_{i=0}^{k-1} A_{Mi} S_i$
 
 Which simplifies to:
 
-$\Delta M + \sum_{i=0}^{k-1} r_i E_i$
+$\Delta M + \rho E$
 
 Since the error term is small, rounding yields the correct message:
 
-$M = \lfloor (\Delta M + \sum_{i=0}^{k-1} r_i E_i) / \Delta \rceil$
+$M = \left\lfloor \dfrac{\Delta M + \rho E}{\Delta} \right\rceil$
 
 Thus, the message $M$ is successfully recovered.
 
