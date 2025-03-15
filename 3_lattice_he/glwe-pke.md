@@ -71,7 +71,7 @@ In practice, a public key would be a list of encryptions of zero (i.e., $M = 0$)
 
     $= \rho E + \Delta M$
 
-    Since $\rho E$ is still a **small error term**, decryption proceeds by rounding:
+2. Since $\rho E$ is still a **small error term**, decryption proceeds by rounding:
 
     $M = \left\lfloor \dfrac{\Delta M + \rho E}{\Delta}\right\rceil $
 
