@@ -15,6 +15,8 @@ In practice, a public key would be a list of encryptions of zero (i.e., $M = 0$)
 
     $PubKey =  (A_0, \dots, A_{k-1}, B)$
 
+    where:
+
     $B = \displaystyle\sum_{i = 0}^{k - 1} A_i \cdot S_i + \Delta 0 + E = \displaystyle\sum_{i = 0}^{k - 1} A_i \cdot S_i + E$
 
 ### Encryption
@@ -53,6 +55,12 @@ In practice, a public key would be a list of encryptions of zero (i.e., $M = 0$)
 
     $C = \left(A_{M0}, \dots, A_{Mk-1}, B_M \right)$
 
+    where:
+
+    - $A_{Mi} = \rho A_i$
+
+    - $B_M = \rho B + \Delta M$
+
 ### Decryption
 
 1. Compute:
@@ -75,7 +83,7 @@ In practice, a public key would be a list of encryptions of zero (i.e., $M = 0$)
 
     $M = \left\lfloor \dfrac{\Delta M + \rho E}{\Delta}\right\rceil $
 
-    As long as $\rho E$ is small enough, rounding correctly recovers $M$.
+    As long as the error term $\rho E$ sastifies $\lvert \rho E \rvert \lt \dfrac{\Delta}{2}$, rounding will recover $M$ correctly.
 
 ## Examples
 
