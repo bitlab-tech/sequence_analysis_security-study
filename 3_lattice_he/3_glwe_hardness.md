@@ -2,15 +2,15 @@
 
 ## Overview
 
-The Generalized Learning With Errors (GLWE) problem is a foundational framework in lattice-based cryptography, unifying several important problems such as Learning With Errors (LWE), Ring Learning With Errors (RLWE), and Module Learning With Errors (MLWE). GLWE is parameterized by a ring$R$, a modulus$q$, and a rank$d$, allowing it to capture a wide range of cryptographic constructions. Its versatility and efficiency make it a cornerstone of many post-quantum cryptographic schemes, such as those standardized by NIST (e.g., CRYSTALS-Kyber and CRYSTALS-Dilithium). Establishing the worst-case hardness of GLWE is thus critical for ensuring the security of these schemes against both classical and quantum adversaries.
+The Generalized Learning With Errors (GLWE) problem is a foundational framework in lattice-based cryptography, unifying several important problems such as Learning With Errors (LWE), Ring Learning With Errors (RLWE), and Module Learning With Errors (MLWE). GLWE is parameterized by a ring $R$, a modulus $q$, and a rank $d$, allowing it to capture a wide range of cryptographic constructions. Its versatility and efficiency make it a cornerstone of many post-quantum cryptographic schemes, such as those standardized by NIST (e.g., CRYSTALS-Kyber and CRYSTALS-Dilithium). Establishing the worst-case hardness of GLWE is thus critical for ensuring the security of these schemes against both classical and quantum adversaries.
 
 This survey proves that solving GLWE is at least as hard as solving worst-case lattice problems, specifically the Shortest Vector Problem (SVP), the Shortest Independent Vectors Problem (SIVP), and Ideal-SIVP. We achieve this through a chain of reductions, starting from well-known hard lattice problems and culminating in GLWE. The structure of the survey is as follows:
 
 - **Section 1** establishes the hardness of SVP and SIVP, showing that approximating these problems within certain factors is NP-hard.
 - **Section 2** reduces SIVP to the Bounded Distance Decoding (BDD) problem, a decoding problem on lattices that serves as an intermediate step.
-- **Section 3** reduces BDD to LWE, which corresponds to GLWE with$R = \mathbb{Z}$and$d = n$.
-- **Section 4** reduces BDD to RLWE, which corresponds to GLWE with$d = 1$.
-- **Section 5** reduces BDD to MLWE, which corresponds to GLWE with arbitrary$d$, typically$1 \leq d \leq n$.
+- **Section 3** reduces BDD to LWE, which corresponds to GLWE with $R = \mathbb{Z}$ and $d = n$.
+- **Section 4** reduces BDD to RLWE, which corresponds to GLWE with $d = 1$.
+- **Section 5** reduces BDD to MLWE, which corresponds to GLWE with arbitrary $d$, typically $1 \leq d \leq n$.
 - The **Conclusion** defines GLWE, notes that it subsumes LWE, RLWE, and MLWE, and concludes that BDD reduces to GLWE in all cases, implying that GLWE inherits the hardness of worst-case lattice problems.
 
 The result confirms that GLWE-based cryptographic schemes are secure under standard assumptions about the hardness of lattice problems, providing a strong theoretical foundation for their use in post-quantum cryptography.
@@ -52,6 +52,7 @@ A full-rank lattice $\Lambda \subset \mathbb{R}^n$ is a discrete subgroup of $\m
 
 ### Definition 2: Shortest Vector Problem (SVP)
 Find the shortest nonzero vector:
+
 $$
 \lambda_1(\Lambda) = \min_{v \in \Lambda \setminus \{0\}} \| v \|.
 $$
@@ -72,7 +73,7 @@ where $\lambda_n(\Lambda)$ is the $n$-th successive minimum, and $\gamma \geq 1$
 - [Haviv, I., & Regev, O. (2007). "Tensor-based Hardness of the Shortest Vector Problem to within Almost Polynomial Factors." *Proceedings of the 39th Annual ACM Symposium on Theory of Computing (STOC), 469-477.*](https://dl.acm.org/doi/pdf/10.1145/1250790.1250859)
 - [Micciancio, D. (2008). "Inapproximability of the Shortest Vector Problem: Toward a Deterministic Reduction." *Theory of Computing, 4(1), 149-161.*](https://theoryofcomputing.org/articles/v004a008/v004a008.pdf)
 
-Approximating SVP within a factor of $2^{(\log n)^{1 - \epsilon}}$ (i.e., $O(2^{\text{polylog}(n)})$) is **NP-hard** under randomized reductions. Approximating SIVP within a factor of $n^{1/\log \log n}$ is also **NP-hard**. These hardness results establish the foundation for reductions to other problems such as BDD, LWE, RLWE, MLWE, and GLWE.
+Approximating SVP within a factor of $2^{(\log n)^{1 - \epsilon}}$ (i.e., $O(2^{\text{polylog}(n)})$ ) is **NP-hard** under randomized reductions. Approximating SIVP within a factor of $n^{1/\log \log n}$ is also **NP-hard**. These hardness results establish the foundation for reductions to other problems such as BDD, LWE, RLWE, MLWE, and GLWE.
 
 ### Lemma 1.1: Reduction from SVP to SIVP
 If SIVP is efficiently solvable within a factor $\gamma$, then SVP can also be efficiently solved within a factor $\gamma \cdot \text{poly}(n)$.
