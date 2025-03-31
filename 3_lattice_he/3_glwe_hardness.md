@@ -152,7 +152,7 @@ distinguish from uniform $(a_i, u_i)$, where:
 - $a_i \sim U(R_q)$,
 - $s \in R_q$,
 - $e_i \sim \chi$(small noise),
-- $R$ is a polynomial ring (e.g.,$\mathbb{Z}[X]/(X^n + 1)$).
+- $R$ is a polynomial ring (e.g., $\mathbb{Z}[X]/(X^n + 1)$ ).
 
 ### Theorem 4: Hardness of RLWE
 
