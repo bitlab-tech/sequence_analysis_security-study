@@ -181,7 +181,7 @@ distinguish from uniform $(\mathbf{a}_i, u_i)$, where:
 - $\mathbf{a}_i \in R_q^d$,
 - $\mathbf{s} \in R_q^d$,
 - $e_i \in R$,
-- $R$ is a polynomial ring (e.g., $\mathbb{Z}[X]/(X^n + 1)$),
+- $R$ is a polynomial ring (e.g., $\mathbb{Z}[X]/(X^n + 1)$ ),
 - $d$ is the rank of the module (typically $1 \leq d \leq n$).
 
 ### Theorem 5: Hardness of MLWE
@@ -208,11 +208,11 @@ $$
 b_i = \langle \mathbf{a}_i, \mathbf{s} \rangle + e_i \mod q,
 $$
 
-distinguish from uniform$(\mathbf{a}_i, u_i)$, where:
+distinguish from uniform $(\mathbf{a}_i, u_i)$, where:
 - $\mathbf{a}_i \in R_q^d$,
 - $\mathbf{s} \in R_q^d$,
 - $e_i \in R$,
-- $R$ is a ring (e.g., $\mathbb{Z}$ or $\mathbb{Z}[X]/(X^n + 1)$),
+- $R$ is a ring (e.g., $\mathbb{Z}$ or $\mathbb{Z}[X]/(X^n + 1)$ ),
 - $d$ is the rank of the module.
 
 GLWE subsumes:
