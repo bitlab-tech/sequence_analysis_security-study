@@ -1,0 +1,22 @@
+{
+  "name": "fastq-to-bam",
+  "version": "1.0.0",
+  "description": "Convert FASTQ files to BAM format using BWA alignment",
+  "main": "fastq_to_bam.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "bioinformatics",
+    "genomics",
+    "fastq",
+    "bam",
+    "bwa",
+    "alignment"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=12.0.0"
+  }
+} 
